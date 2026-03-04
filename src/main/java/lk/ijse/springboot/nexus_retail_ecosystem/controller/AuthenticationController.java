@@ -1,5 +1,6 @@
 package lk.ijse.springboot.nexus_retail_ecosystem.controller;
 
+import jakarta.validation.Valid;
 import lk.ijse.springboot.nexus_retail_ecosystem.dto.APIResponse;
 import lk.ijse.springboot.nexus_retail_ecosystem.dto.AuthenticationRequest;
 import lk.ijse.springboot.nexus_retail_ecosystem.dto.RegisterRequest;
@@ -20,7 +21,7 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/register")
-    public ResponseEntity<APIResponse> register(@RequestBody RegisterRequest request) {
+    public ResponseEntity<APIResponse> register(@Valid @RequestBody RegisterRequest request) {
         // 1. Call the service to do the business logic
         var authData = authenticationService.register(request);
 
@@ -36,7 +37,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<APIResponse> authenticate(@RequestBody AuthenticationRequest request) {
+    public ResponseEntity<APIResponse> authenticate(@Valid @RequestBody AuthenticationRequest request) {
         // 1. Call the service to verify credentials
         var authData = authenticationService.authenticate(request);
 
