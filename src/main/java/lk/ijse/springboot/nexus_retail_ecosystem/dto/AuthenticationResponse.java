@@ -11,4 +11,5 @@ import lombok.NoArgsConstructor;
 @Builder
 public class AuthenticationResponse {
     private String token;
+    private String role;//to identify who logged in
 }

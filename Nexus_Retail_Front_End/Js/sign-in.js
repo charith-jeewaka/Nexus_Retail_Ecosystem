@@ -20,11 +20,21 @@ $(document).ready(function(){
 
                     // THE MOST IMPORTANT LINE: Save the token to the browser!
                     localStorage.setItem("nexus_token", res.data.token);
+                    localStorage.setItem("nexus_role",res.data.role);
 
-                    alert("Login successful!");
+                    alert("Login successful!"+ res.data.role);
 
-                    // Redirect them to the main POS dashboard
-                    window.location.href = "../pages/dashboard.html"; // Make sure this matches your folder structure
+                    // 2. The Traffic Cop: Redirect based on the role
+                    if (res.data.role === "ADMIN") {
+                        window.location.href = "../pages/admin-dashboard.html";
+                    }
+                    else if (res.data.role === "CASHIER") {
+                        window.location.href = "../pages/cashier-dashboard.html";
+                    }
+                    else {
+                        // Default fallback for CUSTOMER
+                        window.location.href = "../pages/customer-dashboard.html";
+                    }
                 } else {
                     alert("Unexpected response: " + res.message);
                 }

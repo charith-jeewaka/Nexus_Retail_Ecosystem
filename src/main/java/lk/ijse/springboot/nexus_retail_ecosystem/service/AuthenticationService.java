@@ -84,6 +84,7 @@ public class AuthenticationService {
 
         return AuthenticationResponse.builder()
                 .token(jwtToken)
+                .role(user.getRole().name())//to grab the user role from the database
                 .build();
     }
 }
