@@ -1,4 +1,202 @@
-<div>
-    <h1 style="font-size: 40px">Admin Dashboard</h1>
-    <p>Welcome to the secure Nexus Retail Ecosystem Admin panel.</p>
+<div class="container-fluid px-4">
+
+    <div class="d-flex justify-content-between align-items-center py-4">
+        <div>
+            <h1 class="h2 text-gray-800 fw-bold m-0">Nexus Admin Command Center</h1>
+            <p class="text-muted m-0">Welcome back, Chief Administrator. Here is your retail ecosystem overview.</p>
+        </div>
+        <div class="d-flex gap-2">
+            <button class="btn btn-outline-secondary btn-sm">
+                <i class="bi bi-download me-1"></i> Generate Report
+            </button>
+            <button class="btn btn-primary btn-sm">
+                <i class="bi bi-plus-circle me-1"></i> Add New Product
+            </button>
+        </div>
+    </div>
+
+    <div class="row g-3 mb-4">
+
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-left-primary shadow h-100 py-2 border-0 border-start border-4 border-primary">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col me-2">
+                            <div class="text-xs fw-bold text-primary text-uppercase mb-1" style="font-size: 0.8rem;">
+                                Today's Revenue</div>
+                            <div class="h5 mb-0 fw-bold text-gray-800">Rs. 145,250.00</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="bi bi-currency-dollar text-gray-300 h1 text-secondaryOpacity"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+            <div class="card shadow h-100 py-2 border-0 border-start border-4 border-success">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col me-2">
+                            <div class="text-xs fw-bold text-success text-uppercase mb-1" style="font-size: 0.8rem;">
+                                New Orders</div>
+                            <div class="h5 mb-0 fw-bold text-gray-800">32</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="bi bi-cart-check text-gray-300 h1 text-secondaryOpacity"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+            <div class="card shadow h-100 py-2 border-0 border-start border-4 border-info">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col me-2">
+                            <div class="text-xs fw-bold text-info text-uppercase mb-1" style="font-size: 0.8rem;">
+                                Active Products</div>
+                            <div class="h5 mb-0 fw-bold text-gray-800">1,250</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="bi bi-box-seam text-gray-300 h1 text-secondaryOpacity"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+            <div class="card shadow h-100 py-2 border-0 border-start border-4 border-danger">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col me-2">
+                            <div class="text-xs fw-bold text-danger text-uppercase mb-1" style="font-size: 0.8rem;">
+                                Low Stock Alerts</div>
+                            <div class="h5 mb-0 fw-bold text-gray-800">5 Items</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="bi bi-exclamation-triangle text-danger h1 opacity-50"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-4">
+
+        <div class="col-lg-8">
+            <div class="card shadow border-0 h-100">
+                <div class="card-header bg-white border-0 pt-3 d-flex justify-content-between align-items-center">
+                    <h6 class="m-0 fw-bold text-primary">Sales Overview (Last 7 Days)</h6>
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            View By
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-menu-item" href="#">Week</a></li>
+                            <li><a class="dropdown-menu-item" href="#">Month</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-body d-flex align-items-center justify-content-center bg-light m-3 rounded" style="min-height: 300px;">
+                    <div class="text-center text-muted">
+                        <i class="bi bi-graph-up h1 d-block mb-2"></i>
+                        [ Interactive ChartJS Graph will load here ]
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card shadow border-0 h-100">
+                <div class="card-header bg-white border-0 pt-3">
+                    <h6 class="m-0 fw-bold text-primary">System Node Status</h6>
+                </div>
+                <div class="card-body">
+                    <h6 class="small fw-bold">Primary Database <span class="float-end text-success">Online (0.5ms)</span></h6>
+                    <div class="progress mb-3" style="height: 10px;">
+                        <div class="progress-bar bg-success" style="width: 100%"></div>
+                    </div>
+                    <h6 class="small fw-bold">Authentication Server <span class="float-end text-success">Online</span></h6>
+                    <div class="progress mb-3" style="height: 10px;">
+                        <div class="progress-bar bg-success" style="width: 100%"></div>
+                    </div>
+                    <h6 class="small fw-bold">Payment Gateway API <span class="float-end text-warning">Slow (250ms)</span></h6>
+                    <div class="progress mb-3" style="height: 10px;">
+                        <div class="progress-bar bg-warning" style="width: 80%"></div>
+                    </div>
+                    <h6 class="small fw-bold">Nexus Front-End (SPA) <span class="float-end text-info">Stable</span></h6>
+                    <div class="progress" style="height: 10px;">
+                        <div class="progress-bar bg-info" style="width: 100%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow border-0 mb-5">
+        <div class="card-header bg-white border-0 pt-3">
+            <h6 class="m-0 fw-bold text-primary">Recent Ecosystem Activity</h6>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped align-middle m-0">
+                    <thead class="table-light text-uppercase fs-7 text-muted">
+                    <tr>
+                        <th class="ps-3">Timestamp</th>
+                        <th>Activity Type</th>
+                        <th>User/Entity</th>
+                        <th>Details</th>
+                        <th class="pe-3 text-end">Status</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td class="ps-3 text-muted">10:35:02 AM</td>
+                        <td><span class="badge bg-success-subtle text-success border border-success-subtle">SALE</span></td>
+                        <td>Cashier_04 (Nimal)</td>
+                        <td>Processed Transaction #TRX-9905 (Rs. 4,500)</td>
+                        <td class="pe-3 text-end text-success"><i class="bi bi-check-circle-fill"></i> Verified</td>
+                    </tr>
+                    <tr>
+                        <td class="ps-3 text-muted">10:34:55 AM</td>
+                        <td><span class="badge bg-info-subtle text-info border border-info-subtle">AUTH</span></td>
+                        <td>Customer_8812 (Priya)</td>
+                        <td>Logged in via Mobile SPA</td>
+                        <td class="pe-3 text-end text-success"><i class="bi bi-check-circle-fill"></i> Verified</td>
+                    </tr>
+                    <tr>
+                        <td class="ps-3 text-muted">10:33:12 AM</td>
+                        <td><span class="badge bg-warning-subtle text-warning border border-warning-subtle">STOCK</span></td>
+                        <td>System_Bot</td>
+                        <td>Item "Munchee Super Cream Cracker" hit reorder point</td>
+                        <td class="pe-3 text-end text-warning"><i class="bi bi-clock-history"></i> Pending</td>
+                    </tr>
+                    <tr>
+                        <td class="ps-3 text-muted">10:30:00 AM</td>
+                        <td><span class="badge bg-danger-subtle text-danger border border-danger-subtle">ADMIN</span></td>
+                        <td>Admin (You)</td>
+                        <td>Updated configuration for Payment Gateway API</td>
+                        <td class="pe-3 text-end text-success"><i class="bi bi-check-circle-fill"></i> Verified</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
 </div>
+
+<style>
+    .text-secondaryOpacity { opacity: 0.15; }
+    .fs-7 { font-size: 0.85rem; }
+    /* Bootstrap subtle badge colors fallback if your version is slightly older */
+    .bg-success-subtle { bg-color: #d1e7dd; }
+    .bg-info-subtle { bg-color: #cff4fc; }
+    .bg-warning-subtle { bg-color: #fff3cd; }
+    .bg-danger-subtle { bg-color: #f8d7da; }
+</style>

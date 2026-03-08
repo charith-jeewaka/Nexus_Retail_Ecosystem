@@ -25,6 +25,7 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final EmailService emailService;
 
     // --- SIGN UP LOGIC ---
     public AuthenticationResponse register(RegisterRequest request) {
@@ -51,6 +52,8 @@ public class AuthenticationService {
                 .password(user.getPassword())
                 .roles(user.getRole().name()) // Automatically adds the "ROLE_" prefix
                 .build();
+
+        emailService.sendWelcomeEmail(user.getEmail(), user.getUsername());
 
         // Now it accepts it perfectly!
         var jwtToken = jwtService.generateToken(userDetails);
