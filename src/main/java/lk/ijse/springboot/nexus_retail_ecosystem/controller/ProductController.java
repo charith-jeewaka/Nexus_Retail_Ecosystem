@@ -47,8 +47,35 @@ public class ProductController {
                 "Products retrieved successfully",
                 products
         );
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN','CASHIER')")
+    public ResponseEntity<APIResponse> updateProduct(@PathVariable Long id ,@Valid @RequestBody ProductDTO productDTO){
+        ProductDTO  updatedProduct =productService.updateProduct(id, productDTO);
+
+        APIResponse response =new APIResponse(
+                HttpStatus.OK.value(),
+                "Product updated Successfully",
+                updatedProduct
+        );
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<APIResponse> deleteProduct(@PathVariable Long id){
+        productService.deleteProduct(id);
+
+        APIResponse response =new APIResponse(
+                HttpStatus.OK.value(),
+                "Product Deleted Successfully",
+                null //no data need to return when deleted
+        );
 
         return ResponseEntity.ok(response);
     }
+
 
 }

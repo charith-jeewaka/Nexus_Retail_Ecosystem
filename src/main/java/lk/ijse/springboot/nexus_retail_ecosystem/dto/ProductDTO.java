@@ -3,6 +3,7 @@ package lk.ijse.springboot.nexus_retail_ecosystem.dto;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,6 +20,7 @@ public class ProductDTO {
     private Long id;
 
     @NotBlank(message = "Product name cannot be empty")
+    @Size(min = 3, max = 20, message = "product name must be between 3 and 20 letters")
     private String name;
 
     @NotBlank(message = "Please select a category")

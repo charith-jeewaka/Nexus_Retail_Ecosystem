@@ -75,4 +75,15 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
+
+    // 5. Handle Resource Not Found (404 Not Found)
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<APIResponse> handleResourceNotFound(ResourceNotFoundException ex) {
+        APIResponse response = new APIResponse(
+                HttpStatus.NOT_FOUND.value(),
+                ex.getMessage(),
+                null
+        );
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
 }
