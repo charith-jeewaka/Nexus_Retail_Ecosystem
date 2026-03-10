@@ -16,12 +16,8 @@ $(document).ready(function() {
         const role = localStorage.getItem("nexus_role");
 
         if (!token) {
-            // Not logged in -> Hide navbar, show Sign In
-            $('#main-nav').hide();
             window.navigateTo('sign-in');
         } else {
-            // Logged in -> Show Navbar & route to Dashboard
-            $('#main-nav').show();
             if (role === 'ADMIN') {
                 window.navigateTo('admin-dashboard');
             } else if (role === 'CASHIER') {
@@ -33,7 +29,7 @@ $(document).ready(function() {
     };
 
     // 3. Global Logout Listener (Using event delegation)
-    $(document).on('click', '#btn-logout', function() {
+    $(document).on('click', '.btn-logout', function() {
         if(confirm("Are you sure you want to log out?")) {
             localStorage.removeItem("nexus_token");
             localStorage.removeItem("nexus_role");
