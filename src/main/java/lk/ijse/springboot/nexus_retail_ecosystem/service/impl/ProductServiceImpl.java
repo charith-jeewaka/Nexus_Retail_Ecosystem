@@ -1,0 +1,63 @@
+package lk.ijse.springboot.nexus_retail_ecosystem.service.impl;
+
+import lk.ijse.springboot.nexus_retail_ecosystem.dto.ProductDTO;
+import lk.ijse.springboot.nexus_retail_ecosystem.entity.Product;
+import lk.ijse.springboot.nexus_retail_ecosystem.exception.DuplicateResourceException;
+import lk.ijse.springboot.nexus_retail_ecosystem.repository.ProductRepository;
+import lk.ijse.springboot.nexus_retail_ecosystem.service.ProductService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+@RequiredArgsConstructor
+public class ProductServiceImpl implements ProductService {
+
+    private final ProductRepository productRepository;
+
+    @Override
+    public ProductDTO saveProduct(ProductDTO productDTO) {
+
+        //check duplicates
+        if (productRepository.existsByName(productDTO.getName())) {
+            throw new DuplicateResourceException("A product with the name '" + productDTO.getName() + "' already exists!");
+        }
+
+        Product product = Product.builder()
+                .name(productDTO.getName())
+                .category(productDTO.getCategory())
+                .unitPrice(productDTO.getUnitPrice())
+                .unitsInStock(productDTO.getUnitsInStock())
+                .imageUrl(productDTO.getImageUrl())
+                .build();
+
+        //saving to database and re sending the saved data to the frontend to get correced and updted data
+        Product savedProduct = productRepository.save(product);
+
+        return mapToDTO(savedProduct);
+    }
+
+    @Override
+    public List<ProductDTO> getAllProducts() {
+        List<Product> products = productRepository.findAll();
+
+        // Convert the list of Entities into a list of DTOs
+        return products.stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList());
+    }
+
+    // A handy helper method to keep our code clean!
+    private ProductDTO mapToDTO(Product product) {
+        return ProductDTO.builder()
+                .id(product.getId())
+                .name(product.getName())
+                .category(product.getCategory())
+                .unitPrice(product.getUnitPrice())
+                .unitsInStock(product.getUnitsInStock())
+                .imageUrl(product.getImageUrl())
+                .build();
+    }
+}
