@@ -20,7 +20,7 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping
-//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN','CASHIER')")
     public ResponseEntity<APIResponse>saveProduct(@Valid @RequestBody ProductDTO productDTO){
         ProductDTO savedProduct=productService.saveProduct(productDTO);
 
@@ -37,7 +37,7 @@ public class ProductController {
 
     // 2. GET ALL PRODUCTS (Secured: ADMIN and CASHIER can view)
     @GetMapping
-//    @PreAuthorize("hasAnyRole('ADMIN', 'CASHIER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'CASHIER')")
     public ResponseEntity<APIResponse> getAllProducts() {
 
         List<ProductDTO> products = productService.getAllProducts();
