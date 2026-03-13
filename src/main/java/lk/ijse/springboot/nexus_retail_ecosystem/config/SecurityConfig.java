@@ -36,6 +36,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v1/auth/**").permitAll()
+                                .requestMatchers("/uploads/**").permitAll()//to viwe images
 //                        .requestMatchers("/api/v1/products/**").permitAll() //TO check the security
                         .anyRequest().authenticated()
                 )

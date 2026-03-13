@@ -20,7 +20,7 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('ADMIN','CASHIER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','CASHIER')")
     public ResponseEntity<APIResponse>saveProduct(@Valid @RequestBody ProductDTO productDTO){
         ProductDTO savedProduct=productService.saveProduct(productDTO);
 
@@ -37,7 +37,7 @@ public class ProductController {
 
     // 2. GET ALL PRODUCTS (Secured: ADMIN and CASHIER can view)
     @GetMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'CASHIER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'CASHIER')")
     public ResponseEntity<APIResponse> getAllProducts() {
 
         List<ProductDTO> products = productService.getAllProducts();
@@ -51,7 +51,7 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN','CASHIER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','CASHIER')")
     public ResponseEntity<APIResponse> updateProduct(@PathVariable Long id ,@Valid @RequestBody ProductDTO productDTO){
         ProductDTO  updatedProduct =productService.updateProduct(id, productDTO);
 
@@ -64,7 +64,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<APIResponse> deleteProduct(@PathVariable Long id){
         productService.deleteProduct(id);
 
