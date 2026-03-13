@@ -10,7 +10,7 @@ $(document).ready(function() {
         });
     };
 
-    // 2. Authentication Checker & Router
+    // 2. authorization
     window.checkAuthAndRoute = function() {
         const token = localStorage.getItem("nexus_token");
         const role = localStorage.getItem("nexus_role");
