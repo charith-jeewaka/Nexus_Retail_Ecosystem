@@ -1,16 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
-    <div class="container-fluid">
-        <span class="navbar-brand text-primary fw-bold">Nexus Admin</span>
-        <div class="collapse navbar-collapse">
-            <ul class="navbar-nav me-auto">
-                <li class="nav-item"><a class="nav-link active" href="admin-dashboard.html">Dashboard</a></li>
-<!--                <li class="nav-item"><a class="nav-link" href="item-management.html">Inventory Manage</a></li>-->
-                <li class="nav-item"><a class="nav-link" href="#">Users</a></li>
-            </ul>
-            <button class="btn btn-danger btn-sm btn-logout">Logout</button>
-        </div>
-    </div>
-</nav>
+
 
 <div class="container-fluid px-4 py-4" id="item-management-container">
 
@@ -19,9 +7,15 @@
             <h2 class="h3 text-gray-800 fw-bold m-0">Item Management</h2>
             <p class="text-muted small m-0">Add new products to the Nexus Ecosystem</p>
         </div>
-        <button class="btn btn-outline-secondary btn-sm shadow-sm" onclick="window.navigateTo('admin-dashboard')">
-            <i class="bi bi-arrow-left"></i> Back to Dashboard
-        </button>
+
+        <div>
+            <button class="btn btn-outline-secondary btn-sm shadow-sm" onclick="window.navigateTo('admin-dashboard')">
+                <i class="bi bi-arrow-left"></i> Back to Dashboard
+            </button>
+            <button class="btn btn-danger btn-sm btn-logout">Logout</button>
+        </div>
+
+
     </div>
 
     <div class="row g-4">

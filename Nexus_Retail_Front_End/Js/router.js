@@ -6,6 +6,9 @@ $(document).ready(function() {
             if (status === "error") {
                 console.error("Failed to load: " + page);
                 $('#app-content').html("<h3 class='text-center mt-5 text-danger'>Page not found!</h3>");
+            } else {
+                // NEW: Announce to the whole app that a new page just loaded!
+                $(document).trigger('pageLoaded', [page]);
             }
         });
     };
