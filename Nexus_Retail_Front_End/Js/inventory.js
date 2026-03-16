@@ -123,5 +123,100 @@ $(document).ready(function() {
     });
 
 
+    // ---------------------------------------------------------
+    // 4. DELETE PRODUCT LOGIC
+    // ---------------------------------------------------------
+    $(document).on('click', '.btn-delete', function() {
+        let productId = $(this).data('id'); // Grab the ID from the button's data-id attribute
+
+        // Show a built-in browser confirmation box
+        if (confirm(`Are you absolutely sure you want to delete Product #${productId}? This cannot be undone.`)) {
+
+            $.ajax({
+                url: productUrl + "/" + productId,
+                method: "DELETE",
+                headers: {
+                    "Authorization": "Bearer " + localStorage.getItem("nexus_token")
+                },
+                success: function(res) {
+                    // Instantly refresh the table to show the product is gone
+                    $('#btn-refresh-inventory').click();
+                },
+                error: function(xhr) {
+                    if (xhr.status === 403) {
+                        alert("Unauthorized: Only Admins can delete products.");
+                    } else if (xhr.status === 404) {
+                        alert("Error: This product no longer exists in the database.");
+                    } else {
+                        alert("Failed to delete product.");
+                    }
+                }
+            });
+        }
+    });
+
+    // ---------------------------------------------------------
+    // 5. OPEN EDIT MODAL LOGIC
+    // ---------------------------------------------------------
+    $(document).on('click', '.btn-edit', function() {
+        let productId = $(this).data('id');
+
+        // Find the exact product in our global memory array
+        let productToEdit = allProducts.find(p => p.id === productId);
+
+        if (productToEdit) {
+            // Populate the modal fields with the existing data
+            $('#edit-product-id').val(productToEdit.id);
+            $('#edit-product-image-url').val(productToEdit.imageUrl); // Preserve the image!
+            $('#edit-product-name').val(productToEdit.name);
+            $('#edit-product-category').val(productToEdit.category);
+            $('#edit-product-price').val(productToEdit.unitPrice);
+            $('#edit-product-stock').val(productToEdit.unitsInStock);
+
+            // Tell Bootstrap to show the modal
+            $('#editProductModal').modal('show');
+        }
+    });
+
+    // ---------------------------------------------------------
+    // 6. SAVE EDITED PRODUCT (PUT REQUEST)
+    // ---------------------------------------------------------
+    $(document).on('submit', '#form-edit-product', function(e) {
+        e.preventDefault(); // Stop the form from refreshing the page
+
+        let productId = $('#edit-product-id').val();
+        $('#btn-update-submit').prop('disabled', true).text('Updating...');
+
+        // Build the updated JSON object
+        const updatedData = {
+            name: $('#edit-product-name').val(),
+            category: $('#edit-product-category').val(),
+            unitPrice: parseFloat($('#edit-product-price').val()),
+            unitsInStock: parseInt($('#edit-product-stock').val()),
+            imageUrl: $('#edit-product-image-url').val() // Send the old string back
+        };
+
+        $.ajax({
+            url: productUrl + "/" + productId,
+            method: "PUT",
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("nexus_token"),
+                "Content-Type": "application/json"
+            },
+            data: JSON.stringify(updatedData),
+            success: function(res) {
+                // Hide the modal, reset the button, and refresh the table
+                $('#editProductModal').modal('hide');
+                $('#btn-update-submit').prop('disabled', false).text('Update Product');
+                $('#btn-refresh-inventory').click();
+            },
+            error: function(xhr) {
+                alert("Failed to update product.");
+                $('#btn-update-submit').prop('disabled', false).text('Update Product');
+            }
+        });
+    });
+
+
 
 });
