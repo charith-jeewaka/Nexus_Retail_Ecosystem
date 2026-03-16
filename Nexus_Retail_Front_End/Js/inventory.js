@@ -127,32 +127,62 @@ $(document).ready(function() {
     // 4. DELETE PRODUCT LOGIC
     // ---------------------------------------------------------
     $(document).on('click', '.btn-delete', function() {
-        let productId = $(this).data('id'); // Grab the ID from the button's data-id attribute
 
-        // Show a built-in browser confirmation box
-        if (confirm(`Are you absolutely sure you want to delete Product #${productId}? This cannot be undone.`)) {
+        // 1. Grab the ID immediately before entering the SweetAlert promise!
+        let productId = $(this).data('id');
 
-            $.ajax({
-                url: productUrl + "/" + productId,
-                method: "DELETE",
-                headers: {
-                    "Authorization": "Bearer " + localStorage.getItem("nexus_token")
-                },
-                success: function(res) {
-                    // Instantly refresh the table to show the product is gone
-                    $('#btn-refresh-inventory').click();
-                },
-                error: function(xhr) {
-                    if (xhr.status === 403) {
-                        alert("Unauthorized: Only Admins can delete products.");
-                    } else if (xhr.status === 404) {
-                        alert("Error: This product no longer exists in the database.");
-                    } else {
-                        alert("Failed to delete product.");
+        Swal.fire({
+            title: "Are you sure?",
+            text: `You are about to delete Product #${productId}. This cannot be undone!`,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33", // Swapped colors: Red for Delete
+            cancelButtonColor: "#3085d6", // Blue for Cancel
+            confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: productUrl + "/" + productId,
+                    method: "DELETE",
+                    headers: {
+                        "Authorization": "Bearer " + localStorage.getItem("nexus_token")
+                    },
+                    success: function(res) {
+                        Swal.fire({
+                            title: "Deleted!",
+                            text: `Product #${productId} has been removed.`,
+                            icon: "success",
+                            timer: 2000,
+                            showConfirmButton: false
+                        });
+
+                        $('#btn-refresh-inventory').click();
+                    },
+                    error: function(xhr) {
+                        if (xhr.status === 403) {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Unauthorized",
+                                text: "Only Admins can delete products."
+                            });
+                        } else if (xhr.status === 404) {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Error",
+                                text: "This product no longer exists in the database."
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Error",
+                                text: "Failed to delete product."
+                            });
+                        }
                     }
-                }
-            });
-        }
+                });
+            }
+        });
     });
 
     // ---------------------------------------------------------

@@ -23,7 +23,7 @@ $(document).ready(function() {
 
     // 2. THE TWO-STEP UPLOAD & SAVE PROCESS
     $(document).on('submit', '#form-save-product', function(e) {
-        e.preventDefault(); // Stop the form from refreshing the page!
+        e.preventDefault(); // Stop  form from refreshing page
 
         // Grab the file if the user selected one
         const imageFile = $('#inp-product-image')[0].files[0];
@@ -53,7 +53,11 @@ $(document).ready(function() {
                     saveProductDetails(imageStringPath);
                 },
                 error: function(xhr) {
-                    alert("Failed to upload image. Please try again.");
+                    Swal.fire({
+                        title: "Error",
+                        text: "Failed to upload image",
+                        icon: "error"
+                    });
                     resetSaveButton();
                 }
             });
@@ -85,7 +89,13 @@ $(document).ready(function() {
             },
             data: JSON.stringify(productData),
             success: function(res) {
-                alert("Product saved successfully!");
+                Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: "Product saved successfully!",
+                    showConfirmButton: false,
+                    timer: 700
+                });
                 clearForm();
                 resetSaveButton();
             },
@@ -98,11 +108,26 @@ $(document).ready(function() {
                     }
                     alert(errorMsg);
                 } else if (xhr.status === 409) {
-                    alert(xhr.responseJSON.message); // Duplicate product
+                    // alert(xhr.responseJSON.message); // Duplicate product
+                    Swal.fire({
+                        title: "Duplicate Input",
+                        text: xhr.responseJSON.message,
+                        icon: "info"
+                    });
                 } else if (xhr.status === 403) {
-                    alert("Unauthorized: Only Admins can add products.");
+                    // alert("Unauthorized: Only Admins can add products.");
+                    Swal.fire({
+                        title: "Unauthorized",
+                        text: "Only Admins can add products",
+                        icon: "error"
+                    });
                 } else {
-                    alert("An error occurred while saving.");
+                    // alert("An error occurred while saving.");
+                    Swal.fire({
+                        title: "Error",
+                        text: "An error occurred while saving",
+                        icon: "error"
+                    });
                 }
                 resetSaveButton();
             }

@@ -17,26 +17,53 @@ $(document).ready(function(){
             }),
             success: function(res){
                 if(res.code === 201 || res.code === 200){
-                    alert("Account created successfully!");
-                    // Route back to sign in
+                    Swal.fire({
+                        title: "Account successfully created!",
+                        icon: "success",
+                        draggable: true,
+                        timer: 2000,
+                    });                    // Route back to sign in
                     window.navigateTo('sign-in');
                 } else {
                     alert("Unexpected response: " + res.message);
                 }
             },
-            error: function(xhr){
+            error: function(xhr) {
                 if (xhr.responseJSON) {
                     if (xhr.status === 400 && xhr.responseJSON.data) {
-                        let errorMsg = "Please fix the following errors:\n\n";
+
+                        // 1. Build a clean HTML unordered list
+                        let errorHtml = "<ul style='text-align: left; margin-bottom: 0;'>";
+
                         for (let field in xhr.responseJSON.data) {
-                            errorMsg += "• " + xhr.responseJSON.data[field] + "\n";
+                            // 2. Wrap each error message in an <li> tag
+                            errorHtml += "<li>" + xhr.responseJSON.data[field] + "</li>";
                         }
-                        alert(errorMsg);
+
+                        errorHtml += "</ul>";
+
+                        // 3. Fire SweetAlert using the 'html' property instead of 'text'
+                        Swal.fire({
+                            icon: "error",
+                            title: "Validation Failed",
+                            html: errorHtml
+                        });
+
                     } else {
-                        alert("Error: " + xhr.responseJSON.message);
+                        // Fallback for other backend errors (like 403 Forbidden or 409 Conflict)
+                        Swal.fire({
+                            icon: "error",
+                            title: "Error",
+                            text: xhr.responseJSON.message
+                        });
                     }
                 } else {
-                    alert("Server error. Could not connect to backend.");
+                    // Fallback for when the server is completely down
+                    Swal.fire({
+                        icon: "error",
+                        title: "Connection Failed",
+                        text: "Server error. Could not connect to backend."
+                    });
                 }
             }
         });

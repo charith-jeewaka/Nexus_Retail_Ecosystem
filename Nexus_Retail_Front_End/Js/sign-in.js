@@ -25,19 +25,42 @@ $(document).ready(function(){
                     alert("Unexpected response: " + res.message);
                 }
             },
-            error: function(xhr){
+            error: function(xhr) {
                 if (xhr.responseJSON) {
                     if (xhr.status === 400 && xhr.responseJSON.data) {
-                        let errorMsg = "Please fix the following errors:\n\n";
+
+                        // 1. Start building an HTML bulleted list.
+                        // text-align: left keeps the bullets looking neat!
+                        let errorHtml = "<ul style='text-align: left; margin-top: 10px;'>";
+
+                        // 2. Wrap each error message in an <li> tag
                         for (let field in xhr.responseJSON.data) {
-                            errorMsg += "• " + xhr.responseJSON.data[field] + "\n";
+                            errorHtml += "<li>" + xhr.responseJSON.data[field] + "</li>";
                         }
-                        alert(errorMsg);
+
+                        // 3. Close the list
+                        errorHtml += "</ul>";
+
+                        // 4. Use SweetAlert's 'html' property instead of 'text'
+                        Swal.fire({
+                            icon: "error",
+                            title: "Please fix the following errors",
+                            html: errorHtml
+                        });
+
                     } else {
-                        alert("Login failed: " + xhr.responseJSON.message);
+                        Swal.fire({
+                            icon: "error",
+                            title: "Login failed", // Or "Action failed" depending on the file!
+                            text: xhr.responseJSON.message
+                        });
                     }
                 } else {
-                    alert("Server error. Could not connect to backend.");
+                    Swal.fire({
+                        icon: "error",
+                        title: "Server Error",
+                        text: "Could not connect to backend"
+                    });
                 }
             }
         });
