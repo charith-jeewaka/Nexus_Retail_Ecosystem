@@ -19,17 +19,20 @@ $(document).ready(function(){
             },
             success: function(res) {
                 if (res.code === 200) {
-                    let totalProducts = res.data.length;
 
-                    $('#dash-active-products-count').text(totalProducts);
+                    let allProducts = res.data;
+
+                    $('#dash-active-products-count').text(allProducts.length);
+
+                    let lowStockItems = allProducts.filter(product => product.unitsInStock < 10);
+
+                    $('#dash-low-stock-count').text(lowStockItems.length + " Items");
                 }
             },
             error: function(xhr) {
                 $('#dash-active-products-count').text("Error");
                 console.error("Failed to load product count for dashboard.");
             }
-
         })
     }
-
 });
