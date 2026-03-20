@@ -1,7 +1,8 @@
+<!--customer-dashboard.html-->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4 shadow-sm">
     <div class="container-fluid px-4">
 
-        <a class="navbar-brand text-primary fw-bold fs-4" href="javascript:void(0);" onclick="window.navigateTo('customer-dashboard')">
+        <a class="navbar-brand text-primary fw-bold fs-4" href="javascript:void(0);" onclick="window.navigateCustomer('shop')">
             <i class="bi bi-hexagon-fill me-2"></i>Nexus Shop
         </a>
 
@@ -23,7 +24,7 @@
             <ul class="navbar-nav ms-auto align-items-center gap-3">
 
                 <li class="nav-item">
-                    <a class="nav-link active fw-semibold" href="javascript:void(0);" onclick="window.navigateTo('customer-dashboard')">Shop</a>
+                    <a class="nav-link active fw-semibold" href="javascript:void(0);" onclick="window.navigateCustomer('shop')">Shop</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link fw-semibold" href="#">My Orders</a>
@@ -89,18 +90,13 @@
                     </ul>
                 </li>
 
-
-
             </ul>
         </div>
     </div>
 </nav>
 
 <div id="customer-main-content">
-    <div class="text-center mt-5">
-        <div class="spinner-border text-primary" role="status"></div>
-        <h5 class="mt-2 text-muted">Loading Shop...</h5>
-    </div>
+
 </div>
 
 <style>

@@ -17,7 +17,7 @@ $(document).ready(function() {
     window.navigateCustomer = function(subPage) {
 
         // Notice we are targeting #customer-main-content, NOT #app-content!
-        $('#customer-main-content').load(`pages/customer-${subPage}.html`, function(response, status, xhr) {
+        $('#customer-main-content').load(`pages/customer/customer-${subPage}.html`, function(response, status, xhr) {
             if (status === "error") {
                 $('#customer-main-content').html("<h3 class='text-center mt-5 text-danger'>Content not found!</h3>");
             } else {
