@@ -13,6 +13,20 @@ $(document).ready(function() {
         });
     };
 
+    // 2. Customer Sub-Router (Swaps content UNDER the customer navbar)
+    window.navigateCustomer = function(subPage) {
+
+        // Notice we are targeting #customer-main-content, NOT #app-content!
+        $('#customer-main-content').load(`pages/customer-${subPage}.html`, function(response, status, xhr) {
+            if (status === "error") {
+                $('#customer-main-content').html("<h3 class='text-center mt-5 text-danger'>Content not found!</h3>");
+            } else {
+                // Announce that a sub-page loaded so our JS can run!
+                $(document).trigger('customerPageLoaded', [subPage]);
+            }
+        });
+    };
+
     // 2. authorization
     window.checkAuthAndRoute = function() {
         const token = localStorage.getItem("nexus_token");

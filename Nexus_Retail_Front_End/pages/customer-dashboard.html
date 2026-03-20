@@ -30,7 +30,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <button class="btn btn-outline-light position-relative border-0" id="btn-view-cart">
+                    <button class="btn btn-outline-light position-relative border-0" id="btn-view-cart" onclick="window.navigateCustomer('cart')">
                         <i class="bi bi-cart3 fs-5"></i>
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="cart-item-count" style="font-size: 0.7rem;">
                             0
@@ -56,7 +56,7 @@
                         </li>
 
                         <li>
-                            <a class="dropdown-item rounded" href="javascript:void(0);">
+                            <a class="dropdown-item rounded" href="javascript:void(0);" onclick="window.navigateCustomer('profile')">
                                 <i class="bi bi-person me-2"></i> My Profile
                             </a>
                         </li>
@@ -96,8 +96,10 @@
     </div>
 </nav>
 
-<div class="container-fluid px-4" id="customer-shop-container">
-    <div class="row" id="product-grid">
+<div id="customer-main-content">
+    <div class="text-center mt-5">
+        <div class="spinner-border text-primary" role="status"></div>
+        <h5 class="mt-2 text-muted">Loading Shop...</h5>
     </div>
 </div>
 
