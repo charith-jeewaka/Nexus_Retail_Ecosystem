@@ -1,3 +1,4 @@
+//inventory.js
 $(document).ready(function() {
 
     const productUrl = "http://localhost:8080/api/v1/products";
@@ -7,9 +8,9 @@ $(document).ready(function() {
     let allProducts = [];
 
     // NEW: Listen for the exact moment the router finishes loading the HTML
-    $(document).on('pageLoaded', function(event, pageName) {
+    $(document).on('adminPageLoaded', function(event, subPage) {
         // Check if the page that just loaded is the inventory page
-        if (pageName === 'inventory-page' || pageName === 'inventory-management') {
+        if (subPage === 'inventory-page' || subPage === 'inventory-management') {
             loadInventory();
         }
     });

@@ -1,11 +1,19 @@
+//admin-dashboard.js
 const baseUrl = "http://localhost:8080/api/v1/products";
 
 
 $(document).ready(function(){
 
-    $(document).on('pageLoaded', function(event,pageName){
+    // 1. When the Main Admin Shell loads, tell the sub-router to instantly load the Overview!
+    $(document).on('pageLoaded', function(event, pageName) {
         if (pageName === 'admin-dashboard') {
-            console.log(pageName);
+            window.navigateAdmin('admin-overview');
+        }
+    });
+
+    // 2. Listen for the Sub-Router. Once the overview HTML is physically on the screen, fetch the stats!
+    $(document).on('adminPageLoaded', function(event, subPage) {
+        if (subPage === 'admin-overview') {
             fetchDashboardStatus();
         }
     });
