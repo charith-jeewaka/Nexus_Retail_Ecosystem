@@ -11,7 +11,7 @@ $(document).ready(function(){
         }
     });
 
-    // 2. Listen for the Sub-Router. Once the overview HTML is physically on the screen, fetch the stats!
+    //  Listen for the Sub-Router. Once the overview HTML is physically on the screen, fetch the stats!
     $(document).on('adminPageLoaded', function(event, subPage) {
         if (subPage === 'admin-overview') {
             fetchDashboardStatus();

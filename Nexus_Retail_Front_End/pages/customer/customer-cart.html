@@ -1,3 +1,225 @@
-<div>
-    <h1>customer Cart</h1>
+<div class="container-xl px-4 py-5 bg-light-modern min-vh-100" id="cart-page-container">
+
+    <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom border-light">
+        <div>
+            <h2 class="h3 fw-bold text-dark mb-0 tracking-tight">Shopping Cart</h2>
+            <p class="text-muted mt-1 mb-0">You have 3 items in your cart</p>
+        </div>
+        <button class="btn btn-light shadow-sm border-0 text-secondary fw-semibold btn-hover-lift" onclick="window.navigateTo('products')">
+            <i class="bi bi-arrow-left me-1"></i> Continue Shopping
+        </button>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+                <div class="card-body p-4">
+
+                    <div class="row d-none d-md-flex text-muted small fw-medium pb-3 border-bottom mb-3 text-uppercase" style="letter-spacing: 0.5px; font-size: 0.75rem;">
+                        <div class="col-6">Product Details</div>
+                        <div class="col-3 text-center">Quantity</div>
+                        <div class="col-2 text-end">Total Price</div>
+                        <div class="col-1"></div>
+                    </div>
+
+                    <div class="row align-items-center py-3 border-bottom cart-item-row">
+                        <div class="col-12 col-md-6 d-flex align-items-center mb-3 mb-md-0">
+                            <img src="https://images.unsplash.com/photo-1621939514649-280e2ee25f60?q=80&w=200&auto=format&fit=crop" alt="Product" class="cart-product-img rounded-3 shadow-sm me-3 object-fit-cover">
+                            <div>
+                                <h6 class="fw-bold text-dark mb-1">Premium Wireless Headphones</h6>
+                                <span class="badge bg-light text-secondary border px-2 py-1 rounded-pill small">Electronics</span>
+                                <div class="text-muted small mt-1">Unit: Rs. 15,000.00</div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3 d-flex justify-content-md-center">
+                            <div class="qty-selector d-flex align-items-center bg-light rounded-pill px-1 border border-light shadow-sm">
+                                <button class="btn btn-sm btn-link text-dark text-decoration-none rounded-circle px-2 fw-bold">-</button>
+                                <input type="number" class="form-control form-control-sm border-0 bg-transparent text-center fw-bold p-0 hide-arrows" value="1" style="width: 35px;">
+                                <button class="btn btn-sm btn-link text-dark text-decoration-none rounded-circle px-2 fw-bold">+</button>
+                            </div>
+                        </div>
+                        <div class="col-4 col-md-2 text-end fw-bold text-dark">
+                            Rs. 15,000.00
+                        </div>
+                        <div class="col-2 col-md-1 text-end">
+                            <button class="btn btn-light text-danger rounded-circle p-2 btn-hover-danger shadow-sm"><i class="bi bi-trash3"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="row align-items-center py-3 border-bottom cart-item-row">
+                        <div class="col-12 col-md-6 d-flex align-items-center mb-3 mb-md-0">
+                            <img src="https://images.unsplash.com/photo-1546868871-7041f2a55e12?q=80&w=200&auto=format&fit=crop" alt="Product" class="cart-product-img rounded-3 shadow-sm me-3 object-fit-cover">
+                            <div>
+                                <h6 class="fw-bold text-dark mb-1">Smart Fitness Watch</h6>
+                                <span class="badge bg-light text-secondary border px-2 py-1 rounded-pill small">Electronics</span>
+                                <div class="text-muted small mt-1">Unit: Rs. 8,500.00</div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3 d-flex justify-content-md-center">
+                            <div class="qty-selector d-flex align-items-center bg-light rounded-pill px-1 border border-light shadow-sm">
+                                <button class="btn btn-sm btn-link text-dark text-decoration-none rounded-circle px-2 fw-bold">-</button>
+                                <input type="number" class="form-control form-control-sm border-0 bg-transparent text-center fw-bold p-0 hide-arrows" value="2" style="width: 35px;">
+                                <button class="btn btn-sm btn-link text-dark text-decoration-none rounded-circle px-2 fw-bold">+</button>
+                            </div>
+                        </div>
+                        <div class="col-4 col-md-2 text-end fw-bold text-dark">
+                            Rs. 17,000.00
+                        </div>
+                        <div class="col-2 col-md-1 text-end">
+                            <button class="btn btn-light text-danger rounded-circle p-2 btn-hover-danger shadow-sm"><i class="bi bi-trash3"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="row align-items-center py-3 cart-item-row">
+                        <div class="col-12 col-md-6 d-flex align-items-center mb-3 mb-md-0">
+                            <div class="cart-product-img rounded-3 shadow-sm me-3 d-flex align-items-center justify-content-center bg-light border text-muted">
+                                <i class="bi bi-image fs-4 opacity-50"></i> </div>
+                            <div>
+                                <h6 class="fw-bold text-dark mb-1">Munchee Cream Cracker 500g</h6>
+                                <span class="badge bg-light text-secondary border px-2 py-1 rounded-pill small">Groceries</span>
+                                <div class="text-muted small mt-1">Unit: Rs. 450.00</div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3 d-flex justify-content-md-center">
+                            <div class="qty-selector d-flex align-items-center bg-light rounded-pill px-1 border border-light shadow-sm">
+                                <button class="btn btn-sm btn-link text-dark text-decoration-none rounded-circle px-2 fw-bold">-</button>
+                                <input type="number" class="form-control form-control-sm border-0 bg-transparent text-center fw-bold p-0 hide-arrows" value="3" style="width: 35px;">
+                                <button class="btn btn-sm btn-link text-dark text-decoration-none rounded-circle px-2 fw-bold">+</button>
+                            </div>
+                        </div>
+                        <div class="col-4 col-md-2 text-end fw-bold text-dark">
+                            Rs. 1,350.00
+                        </div>
+                        <div class="col-2 col-md-1 text-end">
+                            <button class="btn btn-light text-danger rounded-circle p-2 btn-hover-danger shadow-sm"><i class="bi bi-trash3"></i></button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm rounded-4 sticky-top" style="top: 20px;">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold text-dark mb-4">Order Summary</h5>
+
+                    <div class="input-group mb-4 shadow-sm rounded-pill overflow-hidden border border-light bg-light p-1">
+                        <input type="text" class="form-control border-0 bg-transparent shadow-none" placeholder="Promo code" aria-label="Promo code">
+                        <button class="btn btn-dark rounded-pill px-4 fw-medium" type="button">Apply</button>
+                    </div>
+
+                    <div class="d-flex justify-content-between mb-3 text-muted">
+                        <span class="fw-medium">Subtotal</span>
+                        <span class="fw-semibold text-dark">Rs. 33,350.00</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-3 text-muted">
+                        <span class="fw-medium">Shipping estimate</span>
+                        <span class="fw-semibold text-dark">Rs. 450.00</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-3 text-muted">
+                        <span class="fw-medium">Tax estimate</span>
+                        <span class="fw-semibold text-dark">Rs. 0.00</span>
+                    </div>
+
+                    <hr class="my-4 opacity-10">
+
+                    <div class="d-flex justify-content-between mb-4 align-items-center">
+                        <span class="fw-bold text-dark fs-5">Total</span>
+                        <span class="fw-bold text-primary fs-4">Rs. 33,800.00</span>
+                    </div>
+
+                    <button class="btn btn-primary bg-gradient-primary w-100 rounded-pill py-3 fw-bold shadow-sm btn-hover-lift d-flex justify-content-center align-items-center gap-2">
+                        Proceed to Checkout <i class="bi bi-arrow-right"></i>
+                    </button>
+
+                    <div class="text-center mt-4 text-muted small">
+                        <p class="mb-2"><i class="bi bi-shield-lock-fill text-success me-1"></i> Secure Checkout</p>
+                        <div class="d-flex justify-content-center gap-2 fs-4 opacity-75">
+                            <i class="bi bi-credit-card-fill"></i>
+                            <i class="bi bi-wallet-fill"></i>
+                            <i class="bi bi-cash-coin"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
 </div>
+
+<style>
+    /* --- Shopping Cart Specific Styles --- */
+
+    .bg-light-modern {
+        background-color: #f4f7f6;
+    }
+
+    .tracking-tight {
+        letter-spacing: -0.02em;
+    }
+
+    /* Product Image Formatting */
+    .cart-product-img {
+        width: 80px;
+        height: 80px;
+        background-color: #f8fafc;
+        border: 1px solid #e2e8f0;
+    }
+
+    /* Smooth row hover effect */
+    .cart-item-row {
+        transition: background-color 0.2s ease;
+        border-radius: 0.5rem;
+    }
+    .cart-item-row:hover {
+        background-color: #f8fafc;
+    }
+
+    /* Custom Quantity Selector Pill */
+    .qty-selector {
+        background-color: #f1f5f9;
+    }
+    .qty-selector .btn-link {
+        color: #475569 !important;
+        transition: all 0.2s ease;
+    }
+    .qty-selector .btn-link:hover {
+        background-color: #e2e8f0;
+        color: #0f172a !important;
+    }
+
+    /* Hide default browser arrows on number inputs */
+    .hide-arrows::-webkit-outer-spin-button,
+    .hide-arrows::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    .hide-arrows[type=number] {
+        -moz-appearance: textfield; /* Firefox */
+    }
+
+    /* Soft Danger Button Hover */
+    .btn-hover-danger {
+        color: #ef4444 !important;
+        background-color: #fef2f2 !important;
+        transition: all 0.2s ease;
+    }
+    .btn-hover-danger:hover {
+        background-color: #fee2e2 !important;
+        transform: scale(1.1);
+    }
+
+    /* Reused Utilities */
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, #0d6efd, #0a58ca);
+    }
+
+    .btn-hover-lift {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .btn-hover-lift:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 15px rgba(13, 110, 253, 0.2) !important;
+    }
+</style>

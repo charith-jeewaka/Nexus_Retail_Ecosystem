@@ -53,7 +53,7 @@ public class AuthenticationService {
                 .roles(user.getRole().name()) // Automatically adds the "ROLE_" prefix
                 .build();
 
-//        emailService.sendWelcomeEmail(user.getEmail(), user.getUsername());
+        emailService.sendWelcomeEmail(user.getEmail(), user.getUsername());
 
         // Now it accepts it perfectly!
         var jwtToken = jwtService.generateToken(userDetails);

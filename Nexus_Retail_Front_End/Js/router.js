@@ -1,8 +1,6 @@
 $(document).ready(function() {
 
-    // ==========================================
-    // 1. MAIN ROUTER (Swaps entire pages)
-    // ==========================================
+    // MAIN ROUTER (Swaps entire pages)
     window.navigateTo = function(page) {
         $('#app-content').load(`pages/${page}.html`, function(response, status, xhr) {
             if (status === "error") {
@@ -15,9 +13,7 @@ $(document).ready(function() {
         });
     };
 
-    // ==========================================
-    // 2. CUSTOMER SUB-ROUTER (Swaps content UNDER customer navbar)
-    // ==========================================
+    // CUSTOMER SUB-ROUTER (Swaps content UNDER customer navbar)
     window.navigateCustomer = function(subPage) {
         // Notice the path looks inside the 'customer' folder!
         $('#customer-main-content').load(`pages/customer/customer-${subPage}.html`, function(response, status, xhr) {
@@ -29,9 +25,7 @@ $(document).ready(function() {
         });
     };
 
-    // ==========================================
-    // 3. ADMIN SUB-ROUTER (Swaps content UNDER admin sidebar)
-    // ==========================================
+    // ADMIN SUB-ROUTER (Swaps content UNDER admin sidebar)
     window.navigateAdmin = function(subPage) {
         $('#admin-main-content').load(`pages/${subPage}.html`, function(response, status, xhr) {
             if (status === "error") {
@@ -42,9 +36,7 @@ $(document).ready(function() {
         });
     };
 
-    // ==========================================
-    // 4. AUTHENTICATION & SECURITY GUARD
-    // ==========================================
+    // AUTHENTICATION & SECURITY GUARD
     window.checkAuthAndRoute = function() {
         const token = localStorage.getItem("nexus_token");
         const role = localStorage.getItem("nexus_role");
@@ -64,10 +56,8 @@ $(document).ready(function() {
         }
     };
 
-    // ==========================================
-    // 5. GLOBAL LOGOUT LISTENER (Upgraded to SweetAlert)
-    // ==========================================
-    $(document).on('click', '.btn-logout', function(e) {
+    // GLOBAL LOGOUT LISTENER (Upgraded to SweetAlert)
+    $(document).on('click', '.btn-logout-modern', function(e) {
         e.preventDefault(); // Stop any default button behaviors
 
         Swal.fire({
@@ -90,9 +80,7 @@ $(document).ready(function() {
         });
     });
 
-    // ==========================================
     // START THE APP
-    // ==========================================
     // Run the security check the exact moment the SPA boots up
     window.checkAuthAndRoute();
 });

@@ -15,9 +15,7 @@ $(document).ready(function() {
         }
     });
 
-    // ---------------------------------------------------------
-    // 1. FETCH ALL PRODUCTS FROM DATABASE
-    // ---------------------------------------------------------
+    //  FETCH ALL PRODUCTS FROM DATABASE
     function loadInventory() {
         const token = localStorage.getItem("nexus_token");
 
@@ -44,9 +42,7 @@ $(document).ready(function() {
         });
     }
 
-    // ---------------------------------------------------------
     // 2. DRAW THE TABLE (With Images & Badges)
-    // ---------------------------------------------------------
     function renderTable(productsToDisplay) {
         let tbody = $("#inventory-table-body");
         tbody.empty();
@@ -92,9 +88,7 @@ $(document).ready(function() {
         });
     }
 
-    // ---------------------------------------------------------
-    // 3. THE SEARCH & FILTER LOGIC
-    // ---------------------------------------------------------
+    // THE SEARCH & FILTER LOGIC
     function applyFilters() {
         let searchTerm = $('#inp-search-product').val().toLowerCase();
         let categoryFilter = $('#filter-category').val();
@@ -124,9 +118,7 @@ $(document).ready(function() {
     });
 
 
-    // ---------------------------------------------------------
-    // 4. DELETE PRODUCT LOGIC
-    // ---------------------------------------------------------
+    //  DELETE PRODUCT LOGIC
     $(document).on('click', '.btn-delete', function() {
 
         // 1. Grab the ID immediately before entering the SweetAlert promise!
@@ -186,9 +178,7 @@ $(document).ready(function() {
         });
     });
 
-    // ---------------------------------------------------------
-    // 5. OPEN EDIT MODAL LOGIC
-    // ---------------------------------------------------------
+    // OPEN EDIT MODAL LOGIC
     $(document).on('click', '.btn-edit', function() {
         let productId = $(this).data('id');
 
@@ -209,9 +199,7 @@ $(document).ready(function() {
         }
     });
 
-    // ---------------------------------------------------------
-    // 6. SAVE EDITED PRODUCT (PUT REQUEST)
-    // ---------------------------------------------------------
+    // SAVE EDITED PRODUCT (PUT REQUEST)
     $(document).on('submit', '#form-edit-product', function(e) {
         e.preventDefault(); // Stop the form from refreshing the page
 

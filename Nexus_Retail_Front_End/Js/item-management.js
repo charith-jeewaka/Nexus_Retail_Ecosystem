@@ -4,24 +4,38 @@ $(document).ready(function() {
     const fileUploadUrl = "http://localhost:8080/api/v1/files/upload"; // We will build this next!
     const productSaveUrl = "http://localhost:8080/api/v1/products";
 
-    // 1. LIVE IMAGE PREVIEW (No backend needed for this part!)
+    // LIVE IMAGE PREVIEW (Updated for the Modern UI)
     $(document).on('change', '#inp-product-image', function(event) {
         const file = event.target.files[0];
 
         if (file) {
-            // Create a temporary browser URL to preview the image
-            const tempUrl = URL.createObjectURL(file);
-            $('#image-preview').attr('src', tempUrl);
+            // Optional but recommended: Verify it's actually an image
+            if (file.type.startsWith('image/')) {
+                // Create a temporary browser URL to preview the image
+                const tempUrl = URL.createObjectURL(file);
 
-            // Show the file name and size (converted to KB)
-            const fileSizeKB = (file.size / 1024).toFixed(1);
-            $('#image-name-display').text(`${file.name} (${fileSizeKB} KB)`);
+                // Update the DOM for the new UI:
+                // 1. Set the source and show the image
+                $('#image-preview').attr('src', tempUrl).removeClass('d-none');
+                // 2. Hide the cloud icon empty state
+                $('#preview-empty-state').addClass('d-none');
+                // 3. Add the solid border class to the container
+                $('.preview-container').addClass('has-image');
+
+                // Show the file name and size (converted to KB)
+                const fileSizeKB = (file.size / 1024).toFixed(1);
+                $('#image-name-display').text(`${file.name} (${fileSizeKB} KB)`);
+            } else {
+                Swal.fire('Invalid File', 'Please select a valid image file (JPEG, PNG, WebP).', 'warning');
+                $('#inp-product-image').val(''); // Clear the invalid input
+                resetImagePreview();
+            }
         } else {
             resetImagePreview();
         }
     });
 
-    // 2. THE TWO-STEP UPLOAD & SAVE PROCESS
+    //  THE TWO-STEP UPLOAD & SAVE PROCESS
     $(document).on('submit', '#form-save-product', function(e) {
         e.preventDefault(); // Stop  form from refreshing page
 
@@ -68,7 +82,7 @@ $(document).ready(function() {
         }
     });
 
-    // STEP 2: SAVE THE JSON DATA TO THE DATABASE
+    // STEP  SAVE THE JSON DATA TO THE DATABASE
     function saveProductDetails(imageStringPath) {
 
         // Build the clean JSON object
@@ -135,6 +149,7 @@ $(document).ready(function() {
     }
 
     // HELPER FUNCTIONS
+    // HELPER FUNCTIONS (Updated for the Modern UI)
     $(document).on('click', '#btn-clear-product', function() {
         clearForm();
     });
@@ -144,12 +159,19 @@ $(document).ready(function() {
         resetImagePreview();
     }
 
+    // This is the crucial update to make the "Clear" button restore the dashed cloud UI
     function resetImagePreview() {
-        $('#image-preview').attr('src', 'https://via.placeholder.com/300x300?text=No+Image');
+        // 1. Hide the image and clear the source
+        $('#image-preview').attr('src', '').addClass('d-none');
+        // 2. Show the cloud icon empty state again
+        $('#preview-empty-state').removeClass('d-none');
+        // 3. Remove the solid border class to get the dashes back
+        $('.preview-container').removeClass('has-image');
+        // 4. Reset the text
         $('#image-name-display').text('No file selected');
     }
 
     function resetSaveButton() {
-        $('#btn-save-product-submit').prop('disabled', false).html('<i class="bi bi-cloud-arrow-up me-1"></i> Save Product');
+        $('#btn-save-product-submit').prop('disabled', false).html('<i class="bi bi-cloud-arrow-up me-2"></i>Save Product');
     }
 });

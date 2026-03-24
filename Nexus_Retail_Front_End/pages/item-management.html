@@ -1,72 +1,83 @@
+<div class="container-fluid px-4 py-4 bg-light-modern min-vh-100" id="item-management-container">
 
-
-<div class="container-fluid px-4 py-4" id="item-management-container">
-
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
         <div>
-            <h2 class="h3 text-gray-800 fw-bold m-0">Item Management</h2>
-            <p class="text-muted small m-0">Add new products to the Nexus Ecosystem</p>
+            <h2 class="h3 text-dark fw-bold m-0 tracking-tight">Add New Product</h2>
+            <p class="text-muted small m-0 mt-1">Register new inventory items into the Nexus Ecosystem</p>
         </div>
 
-        <div>
-            <button class="btn btn-outline-secondary btn-sm shadow-sm" onclick="window.navigateTo('admin-dashboard')">
-                <i class="bi bi-arrow-left"></i> Back to Dashboard
+        <div class="d-flex gap-2">
+            <button class="btn btn-light shadow-sm border-0 text-secondary fw-semibold btn-hover-lift" onclick="window.navigateTo('admin-dashboard')">
+                <i class="bi bi-arrow-left me-1"></i> Dashboard
             </button>
-            <button class="btn btn-danger btn-sm btn-logout">Logout</button>
+            <button class="btn btn-danger-soft shadow-sm border-0 fw-semibold btn-hover-lift btn-logout">
+                <i class="bi bi-box-arrow-right me-1"></i> Logout
+            </button>
         </div>
-
-
     </div>
 
     <div class="row g-4">
         <div class="col-lg-8">
-            <div class="card shadow border-0 h-100">
-                <div class="card-header bg-white border-0 pt-4 pb-0">
-                    <h6 class="m-0 fw-bold text-primary"><i class="bi bi-box-seam me-2"></i>Product Details</h6>
+            <div class="card shadow-sm border-0 h-100 rounded-4 overflow-hidden">
+                <div class="card-header bg-white border-bottom-0 pt-4 pb-2 px-4">
+                    <h6 class="m-0 fw-bold text-dark d-flex align-items-center">
+                        <div class="icon-square bg-primary-subtle text-primary rounded-3 d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px;">
+                            <i class="bi bi-box-seam"></i>
+                        </div>
+                        Product Details
+                    </h6>
                 </div>
                 <div class="card-body p-4">
                     <form id="form-save-product">
 
-                        <div class="row mb-3">
+                        <div class="row g-3 mb-3">
                             <div class="col-md-6">
-                                <label class="form-label fw-semibold text-dark">Product Name <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="inp-product-name" placeholder="e.g., Munchee Cream Cracker" required>
+                                <div class="form-floating">
+                                    <input type="text" class="form-control custom-input" id="inp-product-name" placeholder="e.g., Munchee Cream Cracker" required>
+                                    <label for="inp-product-name">Product Name <span class="text-danger">*</span></label>
+                                </div>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label fw-semibold text-dark">Category <span class="text-danger">*</span></label>
-                                <select class="form-control form-select" id="inp-product-category" required>
-                                    <option value="" selected disabled>Select a category...</option>
-                                    <option value="Groceries">Groceries</option>
-                                    <option value="Beverages">Beverages</option>
-                                    <option value="Electronics">Electronics</option>
-                                    <option value="Stationery">Stationery</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="row mb-4">
-                            <div class="col-md-6">
-                                <label class="form-label fw-semibold text-dark">Unit Price (Rs.) <span class="text-danger">*</span></label>
-                                <input type="number" step="0.01" min="0" class="form-control" id="inp-product-price" placeholder="0.00" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label fw-semibold text-dark">Initial Stock <span class="text-danger">*</span></label>
-                                <input type="number" min="0" class="form-control" id="inp-product-stock" placeholder="0" required>
+                                <div class="form-floating">
+                                    <select class="form-select custom-input" id="inp-product-category" required>
+                                        <option value="" selected disabled>Select a category...</option>
+                                        <option value="Groceries">Groceries</option>
+                                        <option value="Beverages">Beverages</option>
+                                        <option value="Electronics">Electronics</option>
+                                        <option value="Stationery">Stationery</option>
+                                    </select>
+                                    <label for="inp-product-category">Category <span class="text-danger">*</span></label>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="mb-4">
-                            <label class="form-label fw-semibold text-dark">Product Image <span class="text-muted fw-normal">(Optional)</span></label>
-                            <input class="form-control" type="file" id="inp-product-image" accept="image/png, image/jpeg, image/webp">
-                            <div class="form-text">Max file size: 5MB. Recommended formats: JPEG, PNG, WebP.</div>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="number" step="0.01" min="0" class="form-control custom-input" id="inp-product-price" placeholder="0.00" required>
+                                    <label for="inp-product-price">Unit Price (Rs.) <span class="text-danger">*</span></label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="number" min="0" class="form-control custom-input" id="inp-product-stock" placeholder="0" required>
+                                    <label for="inp-product-stock">Initial Stock <span class="text-danger">*</span></label>
+                                </div>
+                            </div>
                         </div>
 
-                        <hr class="my-4">
+                        <div class="mb-4 bg-light p-3 rounded-4 border border-light">
+                            <label class="form-label fw-semibold text-dark mb-2">Product Image <span class="text-muted fw-normal">(Optional)</span></label>
+                            <input class="form-control custom-input bg-white" type="file" id="inp-product-image" accept="image/png, image/jpeg, image/webp">
+                            <div class="form-text mt-2"><i class="bi bi-info-circle me-1"></i>Max file size: 5MB. Recommended formats: JPEG, PNG, WebP.</div>
+                        </div>
+
+                        <hr class="my-4 opacity-10">
 
                         <div class="d-flex justify-content-end gap-2">
-                            <button type="button" class="btn btn-light border" id="btn-clear-product">Clear Form</button>
-                            <button type="submit" class="btn btn-primary" id="btn-save-product-submit">
-                                <i class="bi bi-cloud-arrow-up me-1"></i> Save Product
+                            <button type="button" class="btn btn-light fw-medium rounded-3 px-4 btn-hover-lift" id="btn-clear-product">Clear Form</button>
+                            <button type="submit" class="btn btn-primary bg-gradient-primary border-0 fw-medium rounded-3 px-4 shadow-sm btn-hover-lift" id="btn-save-product-submit">
+                                <i class="bi bi-cloud-arrow-up me-2"></i>Save Product
                             </button>
                         </div>
                     </form>
@@ -75,20 +86,76 @@
         </div>
 
         <div class="col-lg-4">
-            <div class="card shadow border-0 h-100">
-                <div class="card-header bg-white border-0 pt-4 pb-0">
-                    <h6 class="m-0 fw-bold text-secondary"><i class="bi bi-image me-2"></i>Visual Preview</h6>
+            <div class="card shadow-sm border-0 h-100 rounded-4 overflow-hidden">
+                <div class="card-header bg-white border-bottom-0 pt-4 pb-2 px-4">
+                    <h6 class="m-0 fw-bold text-dark d-flex align-items-center">
+                        <div class="icon-square bg-secondary-subtle text-secondary rounded-3 d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px;">
+                            <i class="bi bi-image"></i>
+                        </div>
+                        Visual Preview
+                    </h6>
                 </div>
                 <div class="card-body d-flex flex-column align-items-center justify-content-center p-4">
 
-                    <div class="border rounded p-2 mb-3 bg-light shadow-sm" style="width: 100%; max-width: 250px; aspect-ratio: 1/1; display: flex; align-items: center; justify-content: center; overflow: hidden;">
-                        <img id="image-preview" src="https://via.placeholder.com/300x300?text=No+Image" alt="Preview" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                    <div class="preview-container mb-3 position-relative d-flex align-items-center justify-content-center"
+                         style="width: 100%; max-width: 280px; aspect-ratio: 1/1;">
+
+                        <div class="text-center text-muted" id="preview-empty-state">
+                            <i class="bi bi-cloud-arrow-up fs-1 text-primary opacity-50 mb-2"></i>
+                            <p class="small mb-0 fw-medium">Image preview will<br>appear here</p>
+                        </div>
+
+                        <img id="image-preview" src="" alt="Product Preview" class="position-absolute w-100 h-100 object-fit-contain p-2 d-none">
                     </div>
 
-                    <p class="text-muted small text-center mb-0" id="image-name-display">No file selected</p>
+                    <div class="bg-light rounded-pill px-3 py-1 mt-2">
+                        <p class="text-muted small text-center mb-0 fw-medium" id="image-name-display">No file selected</p>
+                    </div>
 
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    /* --- Item Management Specific Styles --- */
+
+    /* Soft Danger Button for Logout */
+    .btn-danger-soft {
+        background-color: #fee2e2;
+        color: #dc2626;
+        transition: all 0.2s ease;
+    }
+
+    .btn-danger-soft:hover {
+        background-color: #fecaca;
+        color: #b91c1c;
+    }
+
+    /* Image Preview Dropzone Style */
+    .preview-container {
+        background-color: #f8fafc;
+        border: 2px dashed #cbd5e1;
+        border-radius: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    /* When you hover over the upload area, subtle feedback */
+    .preview-container:hover {
+        border-color: #94a3b8;
+        background-color: #f1f5f9;
+    }
+
+    /* Add a class via JS when an image is successfully loaded to remove the dashed border */
+    .preview-container.has-image {
+        border-style: solid;
+        border-color: #e2e8f0;
+        background-color: #ffffff;
+    }
+
+    /* Optional: Smooth fade for the image preview */
+    #image-preview {
+        transition: opacity 0.3s ease;
+    }
+</style>

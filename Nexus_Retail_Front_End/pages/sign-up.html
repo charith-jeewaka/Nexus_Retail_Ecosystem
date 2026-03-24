@@ -1,27 +1,87 @@
-<div class="container vh-100 d-flex justify-content-center align-items-center">
-    <div class="card shadow p-4" style="width:400px">
-        <h3 class="text-center mb-4">Create Account</h3>
-        <form>
-            <div class="mb-3">
-                <label for="inp-signup-username" class="form-label">Username</label>
-                <input type="text" class="form-control" placeholder="Enter Username" id="inp-signup-username">
+<div class="container vh-100 d-flex justify-content-center align-items-center bg-light-modern">
+    <div class="card login-card shadow-lg border-0 overflow-hidden" style="max-width: 900px; width: 100%;">
+        <div class="row g-0">
+
+            <div class="col-md-5 d-none d-md-flex text-white flex-column justify-content-center align-items-center p-5 position-relative overflow-hidden branding-side-signup">
+                <div class="z-1 text-center">
+                    <h2 class="fw-bold mb-3">Join Us!</h2>
+                    <p class="opacity-75">Create an account to kickstart your journey and unlock all features.</p>
+                </div>
+                <div class="bg-shape-1"></div>
+                <div class="bg-shape-2"></div>
             </div>
-            <div class="mb-3">
-                <label for="inp-signup-email" class="form-label">Email</label>
-                <input type="email" class="form-control" placeholder="Enter Email" id="inp-signup-email">
+
+            <div class="col-md-7 p-4 p-sm-5 bg-white">
+                <div class="text-center mb-4">
+                    <h3 class="fw-bold text-dark mb-1">Create Account</h3>
+                    <p class="text-muted">Fill in the details below to get started</p>
+                </div>
+
+                <form>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control custom-input" id="inp-signup-username" placeholder="Username">
+                        <label for="inp-signup-username">Username</label>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <input type="email" class="form-control custom-input" id="inp-signup-email" placeholder="Email Address">
+                        <label for="inp-signup-email">Email Address</label>
+                    </div>
+
+                    <div class="form-floating mb-4">
+                        <input type="password" class="form-control custom-input" id="inp-signup-password" placeholder="Password">
+                        <label for="inp-signup-password">Password</label>
+                    </div>
+
+                    <button type="button" id="btn-sign-up" class="btn w-100 py-3 rounded-3 fw-bold btn-signup shadow-sm">
+                        Sign Up
+                    </button>
+                </form>
+
+                <hr class="my-4 opacity-25">
+
+                <p class="text-center text-muted mb-0" style="font-size: 0.95rem;">
+                    Already have an account?
+                    <a href="javascript:void(0);" onclick="window.navigateTo('sign-in')" class="fw-semibold text-success text-decoration-none ms-1 link-hover-signup">Sign In</a>
+                </p>
             </div>
-            <div class="mb-3">
-                <label for="inp-signup-password" class="form-label">Password</label>
-                <input type="password" class="form-control" placeholder="Enter Password" id="inp-signup-password">
-            </div>
-            <button type="button" id="btn-sign-up" class="btn btn-success w-100">
-                Sign Up
-            </button>
-        </form>
-        <hr>
-        <p class="text-center">
-            Already have an account?
-            <a href="javascript:void(0);" onclick="window.navigateTo('sign-in')">Sign In</a>
-        </p>
+        </div>
     </div>
 </div>
+
+<style>
+    /* --- Sign Up Specific Styles --- */
+
+    /* Green gradient for the branding side */
+    .branding-side-signup {
+        background: linear-gradient(135deg, #198754 0%, #146c43 100%);
+    }
+
+    /* Green gradient and hover effects for the Sign Up button */
+    .btn-signup {
+        background: linear-gradient(135deg, #198754, #146c43);
+        color: white;
+        border: none;
+        letter-spacing: 0.5px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-signup:hover {
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 15px rgba(25, 135, 84, 0.25) !important;
+    }
+
+    /* Custom link hover for the bottom text */
+    .link-hover-signup {
+        transition: color 0.2s ease;
+    }
+
+    .link-hover-signup:hover {
+        color: #0f5132 !important;
+    }
+
+    /* Optional: Make the input focus border match the green theme on the signup page */
+    /* You would add a class like 'input-success' to the inputs if you want to isolate this,
+       otherwise it stays the blue default from the previous CSS */
+</style>
