@@ -4,6 +4,7 @@ import lk.ijse.springboot.nexus_retail_ecosystem.util.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -36,9 +37,9 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v1/auth/**").permitAll()
-                                .requestMatchers("/uploads/**").permitAll()//to viwe images
-//                        .requestMatchers("/api/v1/products/**").permitAll() //TO check the security
-                        .anyRequest().authenticated()
+                        .requestMatchers("/uploads/**").permitAll() // to view images
+                        .requestMatchers(HttpMethod.GET, "/api/v1/products/**").permitAll() // Customers can view products!
+                        .anyRequest().authenticated() // Everything else requires a valid token
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)

@@ -37,7 +37,7 @@ public class ProductController {
 
     // 2. GET ALL PRODUCTS (Secured: ADMIN and CASHIER can view)
     @GetMapping
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'CASHIER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'CASHIER','CUSTOMER')")
     public ResponseEntity<APIResponse> getAllProducts() {
 
         List<ProductDTO> products = productService.getAllProducts();
