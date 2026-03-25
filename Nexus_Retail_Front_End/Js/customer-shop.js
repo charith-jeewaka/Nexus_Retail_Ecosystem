@@ -1,8 +1,14 @@
 $(document).ready(function () {
     const productUrl = "http://localhost:8080/api/v1/products";
-    const backendBaseUrl = "http://localhost:8080"
+    const backendBaseUrl = "http://localhost:8080";
 
-    //
+    // GLOBAL VARIABLE: Store all products in memory so searching is instant!
+    let allShopProducts = [];
+
+    // Track the currently active category filter
+    let activeCategory = "All";
+
+    // 1. Listen for the CUSTOMER Sub-Router event
     $(document).on('customerPageLoaded', function (event, subPage) {
         if (subPage === 'shop') {
             loadCustomerProducts();
@@ -10,7 +16,7 @@ $(document).ready(function () {
         }
     });
 
-    //fetch products (sprig boot)
+    // 2. Fetch products (Spring Boot)
     function loadCustomerProducts() {
         $.ajax({
             url: productUrl,
@@ -20,36 +26,41 @@ $(document).ready(function () {
             },
             success: function (res) {
                 if(res.code === 200){
-                    renderProductGrid(res.data);
+                    allShopProducts = res.data; // Save them to our global array
+                    renderProductGrid(allShopProducts); // Draw all of them initially
                 }
             },
             error: function (xhr){
                 $('#customer-product-grid').html(`<div class="col-12 text-center text-danger py-5">Failed to load catalog. Server error.</div>`);
             }
-        })
+        });
     }
 
+    // 3. Draw the Product Cards
     function renderProductGrid(products) {
         let grid = $('#customer-product-grid');
         grid.empty();
 
         if (products.length === 0) {
-            grid.html(`<div class="col-12 text-center text-muted py-5">No products available at the moment.</div>`);
+            grid.html(`
+                <div class="col-12 text-center text-muted py-5">
+                    <i class="bi bi-search text-secondary opacity-25" style="font-size: 4rem;"></i>
+                    <h5 class="mt-3">No products found</h5>
+                    <p>Try adjusting your search or category filters.</p>
+                </div>
+            `);
             return;
         }
 
         products.forEach(product => {
-            // Handle image or fallback placeholder
             let imageSrc = product.imageUrl
                 ? backendBaseUrl + product.imageUrl
                 : "https://via.placeholder.com/300x200?text=No+Image";
 
-            // Prevent buying out-of-stock items!
             let isOutOfStock = product.unitsInStock === 0;
             let btnClass = isOutOfStock ? "btn-secondary disabled" : "btn-primary btn-add-cart";
             let btnText = isOutOfStock ? "Out of Stock" : `<i class="bi bi-cart-plus me-1"></i> Add to Cart`;
 
-            // Build the Bootstrap Card. Notice we attach the product details to the button's data attributes!
             let card = `
                 <div class="col-12 col-sm-6 col-md-4 col-lg-3">
                     <div class="card h-100 shadow-sm border-0 product-card-hover">
@@ -75,32 +86,89 @@ $(document).ready(function () {
     }
 
     // ---------------------------------------------------------
-    // 4. ADD TO CART LOGIC
+    // 4. SEARCH & FILTER LOGIC
+    // ---------------------------------------------------------
+
+    // The master function that applies both text search and category filters
+    function applyShopFilters() {
+        // 1. Safely grab the search text (fallback to empty string if undefined)
+        let rawSearch = $('#inp-customer-search').val();
+        let searchTerm = rawSearch ? rawSearch.toLowerCase().trim() : "";
+
+        // 2. Filter the array
+        let filteredProducts = allShopProducts.filter(product => {
+
+            // Safely check the product name (in case the DB has a null name)
+            let productName = product.name ? product.name.toLowerCase() : "";
+            let matchesSearch = productName.includes(searchTerm);
+
+            // Check category (Make sure to trim extra spaces!)
+            let matchesCategory = (activeCategory === "All") || (product.category === activeCategory);
+
+            // Item must pass BOTH tests
+            return matchesSearch && matchesCategory;
+        });
+
+        // 3. Redraw the grid
+        renderProductGrid(filteredProducts);
+    }
+
+    // Trigger filter when typing in the search bar
+    $(document).on('input', '#inp-customer-search', applyShopFilters);
+
+    // Trigger filter if they click the actual search icon button
+    $(document).on('click', '#btn-customer-search', applyShopFilters);
+
+    // Trigger filter when a user clicks a Category Pill
+    $(document).on('click', '.filter-btn', function() {
+        // Visually update the buttons
+        $('.filter-btn').removeClass('btn-primary shadow-sm active').addClass('btn-outline-secondary bg-white');
+        $(this).removeClass('btn-outline-secondary bg-white').addClass('btn-primary shadow-sm active');
+
+        // Grab the text of the button they clicked
+        activeCategory = $(this).text().trim();
+
+        // Run the filter
+        applyShopFilters();
+    });
+
+    // Trigger filter every time the user types a letter in the search bar!
+    $(document).on('input', '#inp-customer-search', applyShopFilters);
+
+    // Trigger filter when a user clicks a Category Pill
+    $(document).on('click', '.filter-btn', function() {
+
+        // 1. Visually update the buttons to show which one is active
+        $('.filter-btn').removeClass('btn-primary shadow-sm active').addClass('btn-outline-secondary bg-white');
+        $(this).removeClass('btn-outline-secondary bg-white').addClass('btn-primary shadow-sm active');
+
+        // 2. Grab the text of the button they clicked (e.g., "Groceries")
+        activeCategory = $(this).text().trim();
+
+        // 3. Run the filter
+        applyShopFilters();
+    });
+
+    // ---------------------------------------------------------
+    // 5. ADD TO CART LOGIC
     // ---------------------------------------------------------
     $(document).on('click', '.btn-add-cart', function() {
-
-        // Grab the data we packed into the button
         let id = $(this).data('id');
         let name = $(this).data('name');
         let price = $(this).data('price');
         let image = $(this).data('image');
 
-        // Check local storage for an existing cart. If none, create an empty array.
         let cart = JSON.parse(localStorage.getItem('nexus_cart')) || [];
-
-        // Check if this item is already in the cart
         let existingItem = cart.find(item => item.id === id);
 
         if (existingItem) {
-            existingItem.qty += 1; // Just increase the quantity
+            existingItem.qty += 1;
         } else {
-            cart.push({ id: id, name: name, price: price, image: image, qty: 1 }); // Add new item
+            cart.push({ id: id, name: name, price: price, image: image, qty: 1 });
         }
 
-        // Save the updated cart back to local storage
         localStorage.setItem('nexus_cart', JSON.stringify(cart));
 
-        // Show a sleek "Toast" notification using SweetAlert
         Swal.fire({
             toast: true,
             position: 'top-end',
@@ -111,25 +179,19 @@ $(document).ready(function () {
             timer: 1500
         });
 
-        // Instantly update the red badge on the navbar!
         updateCartBadge();
-        console.log(localStorage.getItem('nexus_cart'));
     });
 
     // ---------------------------------------------------------
-    // 5. UPDATE CART BADGE GLOBALLY
+    // 6. UPDATE CART BADGE GLOBALLY
     // ---------------------------------------------------------
     window.updateCartBadge = function() {
         let cart = JSON.parse(localStorage.getItem('nexus_cart')) || [];
-
-        // Count total quantity of all items
         let totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
-
         $('#cart-item-count').text(totalItems);
 
-        // Add a tiny animation bump to the badge to draw the user's eye!
         $('#cart-item-count').addClass('animate__animated animate__heartBeat').on('animationend', function() {
             $(this).removeClass('animate__animated animate__heartBeat');
         });
     };
-})
+});

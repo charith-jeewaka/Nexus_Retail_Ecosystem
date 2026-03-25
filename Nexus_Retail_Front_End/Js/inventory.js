@@ -146,7 +146,7 @@ $(document).ready(function() {
                             title: "Deleted!",
                             text: `Product #${productId} has been removed.`,
                             icon: "success",
-                            timer: 2000,
+                            timer: 1000,
                             showConfirmButton: false
                         });
 
