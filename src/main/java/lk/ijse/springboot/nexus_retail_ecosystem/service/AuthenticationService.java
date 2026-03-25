@@ -10,7 +10,6 @@ import lk.ijse.springboot.nexus_retail_ecosystem.repository.UserRepository;
 import lk.ijse.springboot.nexus_retail_ecosystem.util.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -29,7 +28,6 @@ public class AuthenticationService {
 
     // --- SIGN UP LOGIC ---
     public AuthenticationResponse register(RegisterRequest request) {
-        // 1. Check for duplicates before doing anything else
         if (userRepository.existsByUsername(request.getUsername())) {
             throw new DuplicateResourceException("Username is already taken!");
         }
@@ -44,22 +42,24 @@ public class AuthenticationService {
                 .role(Role.CUSTOMER)
                 .build();
 
-        userRepository.save(user);
+        // Capture the saved user so we have the auto-generated ID!
+        var savedUser = userRepository.save(user);
 
-        // TRANSLATION: Convert your User to Spring Security's UserDetails
         UserDetails userDetails = org.springframework.security.core.userdetails.User.builder()
-                .username(user.getUsername())
-                .password(user.getPassword())
-                .roles(user.getRole().name()) // Automatically adds the "ROLE_" prefix
+                .username(savedUser.getUsername())
+                .password(savedUser.getPassword())
+                .roles(savedUser.getRole().name())
                 .build();
 
-        emailService.sendWelcomeEmail(user.getEmail(), user.getUsername());
+        emailService.sendWelcomeEmail(savedUser.getEmail(), savedUser.getUsername());
 
-        // Now it accepts it perfectly!
         var jwtToken = jwtService.generateToken(userDetails);
 
         return AuthenticationResponse.builder()
                 .token(jwtToken)
+                .role(savedUser.getRole().name())
+                .userId(savedUser.getId())           // <-- NEW
+                .username(savedUser.getUsername())   // <-- NEW
                 .build();
     }
 
@@ -75,19 +75,19 @@ public class AuthenticationService {
         var user = userRepository.findByUsername(request.getUsername())
                 .orElseThrow(()-> new UsernameNotFoundException("User not found with username: "+request.getUsername()));
 
-        // TRANSLATION: Convert your User to Spring Security's UserDetails
         UserDetails userDetails = org.springframework.security.core.userdetails.User.builder()
                 .username(user.getUsername())
                 .password(user.getPassword())
                 .roles(user.getRole().name())
                 .build();
 
-        // Generate the token
         var jwtToken = jwtService.generateToken(userDetails);
 
         return AuthenticationResponse.builder()
                 .token(jwtToken)
-                .role(user.getRole().name())//to grab the user role from the database
+                .role(user.getRole().name())
+                .userId(user.getId())           // <-- NEW
+                .username(user.getUsername())   // <-- NEW
                 .build();
     }
 }

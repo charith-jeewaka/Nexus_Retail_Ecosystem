@@ -12,4 +12,7 @@ import lombok.NoArgsConstructor;
 public class AuthenticationResponse {
     private String token;
     private String role;//to identify who logged in
+
+    private Long userId;
+    private String username;
 }

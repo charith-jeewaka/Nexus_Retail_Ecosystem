@@ -73,6 +73,8 @@ $(document).ready(function() {
                 // Wipe the security clearance from memory
                 localStorage.removeItem("nexus_token");
                 localStorage.removeItem("nexus_role");
+                localStorage.removeItem("nexus_user_id");
+                localStorage.removeItem("nexus_user_name");
 
                 // Trigger the auth guard, which will instantly kick them to sign-in
                 window.checkAuthAndRoute();

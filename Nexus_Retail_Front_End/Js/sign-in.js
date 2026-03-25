@@ -19,8 +19,12 @@ $(document).ready(function(){
                     localStorage.setItem("nexus_token", res.data.token);
                     localStorage.setItem("nexus_role", res.data.role);
 
+                    localStorage.setItem("nexus_user_id", res.data.userId);
+                    localStorage.setItem("nexus_user_name", res.data.username);
+
                     // Trigger the SPA Router
                     window.checkAuthAndRoute();
+
                 } else {
                     alert("Unexpected response: " + res.message);
                 }
