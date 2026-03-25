@@ -58,19 +58,21 @@ $(document).ready(function () {
                 : "https://via.placeholder.com/300x200?text=No+Image";
 
             let isOutOfStock = product.unitsInStock === 0;
-            let btnClass = isOutOfStock ? "btn-secondary disabled" : "btn-primary btn-add-cart";
-            let btnText = isOutOfStock ? "Out of Stock" : `<i class="bi bi-cart-plus me-1"></i> Add to Cart`;
+            // Added btn-sm here to make the button sleeker
+            let btnClass = isOutOfStock ? "btn-secondary disabled btn-sm" : "btn-primary btn-add-cart btn-sm";
+            let btnText = isOutOfStock ? "Out of Stock" : `<i class="bi bi-cart-plus me-1"></i> Add`;
 
+            // Updated Grid classes, Image height (140px), and Font sizes (fs-6, small)
             let card = `
-                <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                    <div class="card h-100 shadow-sm border-0 product-card-hover">
-                        <img src="${imageSrc}" class="card-img-top" alt="${product.name}" style="height: 180px; object-fit: cover;">
-                        <div class="card-body d-flex flex-column">
-                            <span class="badge bg-light text-secondary border mb-2 align-self-start">${product.category}</span>
-                            <h6 class="card-title fw-bold text-dark text-truncate" title="${product.name}">${product.name}</h6>
-                            <h5 class="text-primary fw-bold mt-auto mb-3">Rs. ${product.unitPrice.toFixed(2)}</h5>
+                <div class="col-6 col-md-4 col-lg-3 col-xl-2"> 
+                    <div class="card h-100 shadow-sm border-0 product-card-hover bg-white">
+                        <img src="${imageSrc}" class="card-img-top p-2" alt="${product.name}" style="height: 140px; object-fit: contain; background-color: #fff;">
+                        <div class="card-body d-flex flex-column p-3">
+                            <span class="badge bg-light text-secondary border mb-2 align-self-start" style="font-size: 0.65rem;">${product.category}</span>
+                            <h6 class="card-title fw-bold text-dark text-truncate mb-1" style="font-size: 0.85rem;" title="${product.name}">${product.name}</h6>
+                            <h6 class="text-primary fw-bold mt-auto mb-3" style="font-size: 0.9rem;">Rs. ${product.unitPrice.toFixed(2)}</h6>
                             
-                            <button class="btn ${btnClass} w-100 mt-auto" 
+                            <button class="btn ${btnClass} w-100 mt-auto fw-semibold rounded-pill" 
                                     data-id="${product.id}" 
                                     data-name="${product.name}" 
                                     data-price="${product.unitPrice}"

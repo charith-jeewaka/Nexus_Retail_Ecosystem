@@ -1,22 +1,24 @@
-<div class="row align-items-center mb-4 mt-3">
-    <div class="col-md-5">
-        <h3 class="fw-bold text-dark m-0 d-flex align-items-center">
-            <i class="bi bi-stars text-warning me-2 fs-4"></i> Fresh Arrivals
-        </h3>
-        <p class="text-muted small m-0 mt-1">Discover our latest collection of premium products</p>
-    </div>
+<div class="sticky-top py-3 glass-header" style="top: 86px; z-index: 1010;">
+    <div class="row align-items-center">
+        <div class="col-md-5">
+            <h3 class="fw-bold text-dark m-0 d-flex align-items-center fs-4">
+                <i class="bi bi-stars text-warning me-2 fs-5"></i> Fresh Arrivals
+            </h3>
+            <p class="text-muted m-0 mt-1" style="font-size: 0.85rem;">Discover our latest collection of premium products</p>
+        </div>
 
-    <div class="col-md-7 text-md-end mt-3 mt-md-0">
-        <div class="d-flex flex-wrap justify-content-md-end gap-2">
-            <button type="button" class="btn btn-primary rounded-pill px-4 fw-semibold shadow-sm filter-btn">All</button>
-            <button type="button" class="btn btn-outline-secondary rounded-pill px-3 fw-medium bg-white filter-btn">Groceries</button>
-            <button type="button" class="btn btn-outline-secondary rounded-pill px-3 fw-medium bg-white filter-btn">Electronics</button>
-            <button type="button" class="btn btn-outline-secondary rounded-pill px-3 fw-medium bg-white filter-btn">Beverages</button>
+        <div class="col-md-7 text-md-end mt-3 mt-md-0">
+            <div class="d-flex flex-wrap justify-content-md-end gap-2">
+                <button type="button" class="btn btn-primary rounded-pill px-3 py-1 fw-semibold shadow-sm filter-btn" style="font-size: 0.85rem;">All</button>
+                <button type="button" class="btn btn-outline-secondary rounded-pill px-3 py-1 fw-medium bg-white filter-btn" style="font-size: 0.85rem;">Groceries</button>
+                <button type="button" class="btn btn-outline-secondary rounded-pill px-3 py-1 fw-medium bg-white filter-btn" style="font-size: 0.85rem;">Electronics</button>
+                <button type="button" class="btn btn-outline-secondary rounded-pill px-3 py-1 fw-medium bg-white filter-btn" style="font-size: 0.85rem;">Beverages</button>
+            </div>
         </div>
     </div>
 </div>
 
-<div class="row g-4 mb-5" id="customer-product-grid">
+<div class="row g-3 mb-5 mt-2" id="customer-product-grid">
     <div class="col-12 text-center py-5">
         <div class="spinner-border text-primary" role="status"></div>
         <p class="text-muted mt-2">Loading catalog...</p>
@@ -24,15 +26,28 @@
 </div>
 
 <style>
+    /* Modern Glass Effect for the Sticky Header */
+    .glass-header {
+        background-color: rgba(244, 247, 246, 0.85); /* Matches your body color but semi-transparent */
+        backdrop-filter: blur(12px); /* Blurs the products scrolling underneath */
+        -webkit-backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(0,0,0,0.05); /* Subtle shadow line */
+        margin-left: -15px; /* Pulls the blur to the edges of the container */
+        margin-right: -15px;
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
     /* Premium hover effects for the product cards */
     .product-card-hover {
         transition: transform 0.25s ease, box-shadow 0.25s ease;
-        border-radius: 12px; /* Softer edges */
-        overflow: hidden; /* Keeps the top image flush with the border radius */
+        border-radius: 10px;
+        overflow: hidden;
+        border: 1px solid rgba(0,0,0,0.05) !important;
     }
     .product-card-hover:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+        transform: translateY(-4px);
+        box-shadow: 0 8px 16px rgba(0,0,0,0.08) !important;
     }
 
     /* Smooth hover transitions for the unselected filter tags */
