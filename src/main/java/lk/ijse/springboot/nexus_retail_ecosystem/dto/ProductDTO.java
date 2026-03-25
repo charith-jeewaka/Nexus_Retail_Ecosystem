@@ -20,7 +20,7 @@ public class ProductDTO {
     private Long id;
 
     @NotBlank(message = "Product name cannot be empty")
-    @Size(min = 3, max = 20, message = "product name must be between 3 and 20 letters")
+    @Size(min = 2, max = 60, message = "product name must be between 2 and 50 letters")
     private String name;
 
     @NotBlank(message = "Please select a category")
