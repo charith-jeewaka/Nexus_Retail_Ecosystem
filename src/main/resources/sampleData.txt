@@ -1,0 +1,8 @@
+INSERT INTO product ( category, image_url, name, unit_price, units_in_stock) VALUES
+                                                                                    ( 'Stationery', '/uploads/pencil.png', 'Sunflower Pen', 50.00, 100),
+                                                                                    ('Beverages', '/uploads/cocacola.jfif', 'Coca Cola Can', 99.99, 50),
+                                                                                    ('Electronics', '/uploads/smartwatch.jpg', 'Sanmung Smart Watch', 5000.00, 5),
+                                                                                    ('Groceries', '/uploads/rice.jfif', 'Rice', 200.00, 1000),
+                                                                                    ('Groceries', '/uploads/dhal.jfif', 'Maisurr Dhal', 150.00, 100),
+                                                                                    ('Stationery', '/uploads/download.png', 'Eraser', 10.00, 20),
+                                                                                    ( 'Electronics', '/uploads/phone.jpg', 'Samsung J7', 30000.00, 5);

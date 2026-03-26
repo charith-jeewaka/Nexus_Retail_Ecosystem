@@ -2,9 +2,11 @@ package lk.ijse.springboot.nexus_retail_ecosystem.service.impl;
 
 import lk.ijse.springboot.nexus_retail_ecosystem.dto.ProductDTO;
 import lk.ijse.springboot.nexus_retail_ecosystem.entity.Product;
+import lk.ijse.springboot.nexus_retail_ecosystem.entity.Review;
 import lk.ijse.springboot.nexus_retail_ecosystem.exception.DuplicateResourceException;
 import lk.ijse.springboot.nexus_retail_ecosystem.exception.ResourceNotFoundException;
 import lk.ijse.springboot.nexus_retail_ecosystem.repository.ProductRepository;
+import lk.ijse.springboot.nexus_retail_ecosystem.repository.ReviewRepository;
 import lk.ijse.springboot.nexus_retail_ecosystem.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,7 @@ import java.util.stream.Collectors;
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
+    private final ReviewRepository reviewRepository;
 
     @Override
     public ProductDTO saveProduct(ProductDTO productDTO) {
@@ -87,11 +90,20 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void deleteProduct(Long id) {
-        // 1. Check if it exists first
+        // 1. Check if the product exists first
         if (!productRepository.existsById(id)) {
             throw new ResourceNotFoundException("Product not found with ID: " + id);
         }
-        // 2. Delete it
+
+        // find all reviews attached to the item
+        List<Review> reviews = reviewRepository.findByProduct_Id(id);
+
+        // delete the reviews related to the item first
+        if (!reviews.isEmpty()) {
+            reviewRepository.deleteAll(reviews);
+        }
+
+        // delete the product
         productRepository.deleteById(id);
     }
 

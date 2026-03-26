@@ -2,29 +2,33 @@ const productBaseUrl = "http://localhost:8080/api/v1/products";
 const reviewBaseUrl = "http://localhost:8080/api/v1/reviews";
 const backendImageBase = "http://localhost:8080";
 
+// Declare the variable here so the rest of your file can use it,
+// but DON'T assign it a value yet!
+let currentProductId = null;
+
 $(document).ready(function() {
-    // 1. Grab the ID that was saved when the user clicked the card
-    let currentProductId = localStorage.getItem("current_view_product_id");
 
-    // 2. Safety check: If no ID is found, kick them back to the shop
-    if (!currentProductId || currentProductId === "undefined" || currentProductId === "null") {
-        Swal.fire("Error", "No product selected.", "error").then(() => {
-            window.navigateCustomer('shop');
-        });
-        return;
-    }
-
+    // Listen for your SPA router to announce that the page is ready
     $(document).on('customerPageLoaded', function (event, subPage) {
         if (subPage === 'product-details') {
-            // 3. Trigger the load method!
-            loadProductDetails(currentProductId);
 
+            // 1. Grab the ID RIGHT NOW, after the card was clicked!
+            currentProductId = localStorage.getItem("current_view_product_id");
+
+            // 2. Safety check: If no ID is found, kick them back to the shop
+            if (!currentProductId || currentProductId === "undefined" || currentProductId === "null") {
+                Swal.fire("Error", "No product selected.", "error").then(() => {
+                    window.navigateCustomer('shop');
+                });
+                return;
+            }
+
+            // 3. Trigger the load method with the fresh ID!
+            loadProductDetails(currentProductId);
         }
     });
 
-
 });
-
 
 // ==========================================
 // FETCH PRODUCT DETAILS
@@ -68,7 +72,6 @@ function loadProductDetails(productId) {
     });
 }
 
-
 // --- HELPER: GENERATE STATIC STARS ---
 function generateStaticStars(rating) {
     let safeRating = rating || 0;
@@ -84,4 +87,3 @@ function generateStaticStars(rating) {
     }
     return starsHtml;
 }
-
