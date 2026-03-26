@@ -72,6 +72,78 @@ function loadProductDetails(productId) {
     });
 }
 
+// qty counter + and -
+
+$(document).on('click','#btn-qty-plus', function() {
+    let qtyInput = $('#inp-detail-qty')
+    let currentQty = parseInt(qtyInput.val());
+    qtyInput.val(currentQty + 1)
+})
+
+$(document).on('click','#btn-qty-minus', function() {
+    let qtyInput = $('#inp-detail-qty')
+    let currentQty = parseInt(qtyInput.val());
+    if (currentQty > 1)
+    qtyInput.val(currentQty - 1)
+})
+
+// add to cart
+
+$(document).on('click', '#btn-detail-add-cart', function() {
+
+    // 1. Grab the quantity the user selected
+    let selectedQty = parseInt($('#inp-detail-qty').val());
+
+    // 2. Grab the product details directly from the DOM
+    let productName = $('#detail-product-name').text();
+    let productPriceText = $('#detail-product-price').text();
+    let productPrice = parseFloat(productPriceText.replace("Rs. ", "")); // Remove "Rs. " to get pure number
+    let productImage = $('#detail-product-image').attr("src");
+
+    // 3. Get the existing cart from Local Storage (or create empty array)
+    let cart = JSON.parse(localStorage.getItem('nexus_cart')) || [];
+
+    // 4. Check if the product is already in the cart using currentProductId
+    // Note: Make sure currentProductId is available in your file!
+    let existingItemIndex = cart.findIndex(item => item.id == currentProductId);
+
+    if (existingItemIndex !== -1) {
+        // If it's already in the cart, just add the new quantity to the existing quantity!
+        cart[existingItemIndex].qty += selectedQty;
+    } else {
+        // If it's new, push it to the cart in the EXACT format your Cart page expects
+        cart.push({
+            id: currentProductId,
+            name: productName,
+            price: productPrice,
+            image: productImage,
+            qty: selectedQty
+        });
+    }
+
+    // 5. Save the updated cart back to Local Storage
+    localStorage.setItem('nexus_cart', JSON.stringify(cart));
+
+    // 6. Update the red badge on the navbar immediately!
+    if (window.updateCartBadge) {
+        window.updateCartBadge();
+    }
+
+    // 7. Show a sleek success toast message
+    Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'success',
+        title: 'Added to Cart',
+        text: `${selectedQty}x ${productName}`,
+        showConfirmButton: false,
+        timer: 1500
+    });
+
+    // 8. Reset the quantity input back to 1 for the next click
+    $('#inp-detail-qty').val(1);
+});
+
 // --- HELPER: GENERATE STATIC STARS ---
 function generateStaticStars(rating) {
     let safeRating = rating || 0;
