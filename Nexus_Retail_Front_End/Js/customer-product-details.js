@@ -25,6 +25,7 @@ $(document).ready(function() {
 
             // 3. Trigger the load method with the fresh ID!
             loadProductDetails(currentProductId);
+            loadProductReviews(currentProductId)
         }
     });
 
@@ -159,3 +160,183 @@ function generateStaticStars(rating) {
     }
     return starsHtml;
 }
+
+
+// ==========================================
+// FETCH AND DRAW REVIEWS
+// ==========================================
+function loadProductReviews(productId) {
+    $.ajax({
+        url: reviewBaseUrl + "/product/" + productId,
+        method: "GET",
+        success: function(res) {
+            let reviews = res.data;
+            let container = $('#review-list-container');
+
+            // Clear the loading spinner
+            container.empty();
+
+            // 1. Check if there are no reviews
+            if (!reviews || reviews.length === 0) {
+                container.append(`
+                    <div class="text-center py-5 bg-light rounded-4 border-dashed">
+                        <i class="bi bi-chat-square-text text-secondary opacity-50 display-4 mb-3 d-block"></i>
+                        <h6 class="text-dark fw-bold">No reviews yet</h6>
+                        <p class="text-muted small">Be the first to share your thoughts!</p>
+                    </div>
+                `);
+                return;
+            }
+
+            // 2. Loop through the reviews (Reversing them so the newest is at the top!)
+            reviews.reverse().forEach(review => {
+
+                // Optional: Format the date beautifully if your backend sends a timestamp
+                let dateObj = new Date(review.createdAt);
+                let formattedDate = isNaN(dateObj) ? "Recently" : dateObj.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+
+                // Grab the first letter of the customer's name for a sleek avatar
+                let initial = review.customerName ? review.customerName.charAt(0).toUpperCase() : "U";
+
+                let reviewCard = `
+                    <div class="card review-card shadow-sm rounded-4 mb-2 border-0">
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-dark text-white rounded-circle d-flex justify-content-center align-items-center me-3 fw-bold" style="width: 45px; height: 45px; font-size: 1.2rem;">
+                                        ${initial}
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0 fw-bold text-dark">${review.customerName}</h6>
+                                        <small class="text-muted">${formattedDate}</small>
+                                    </div>
+                                </div>
+                                <div class="text-warning fs-6">
+                                    ${generateStaticStars(review.rating)}
+                                </div>
+                            </div>
+                            <p class="card-text text-secondary mb-0" style="line-height: 1.6;">${review.comment}</p>
+                        </div>
+                    </div>
+                `;
+                container.append(reviewCard);
+            });
+        },
+        error: function(xhr) {
+            console.error(xhr);
+            $('#review-list-container').html(`
+                <div class="alert alert-danger rounded-4">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i> Could not load reviews at this time.
+                </div>
+            `);
+        }
+    });
+}
+
+// ==========================================
+// UI CONTROLS: INTERACTIVE STARS
+// ==========================================
+let selectedRating = 0;
+
+// Hover effect: Fill stars as the mouse moves over them
+$(document).on('mouseenter', '.interactive-star', function() {
+    let hoverValue = $(this).data('rating');
+    updateStarUI(hoverValue);
+});
+
+// Leave effect: Revert to the clicked rating when the mouse leaves
+$(document).on('mouseleave', '#interactive-star-rating', function() {
+    updateStarUI(selectedRating);
+});
+
+// Click effect: Lock in the rating and save it to the hidden input
+$(document).on('click', '.interactive-star', function() {
+    selectedRating = $(this).data('rating');
+    $('#inp-review-rating').val(selectedRating);
+    updateStarUI(selectedRating);
+    $('#rating-error').hide(); // Hide validation error if they fix it
+});
+
+// Helper to color the stars gold or grey
+function updateStarUI(rating) {
+    $('.interactive-star').each(function() {
+        let starValue = $(this).data('rating');
+        if (starValue <= rating) {
+            $(this).removeClass('bi-star text-secondary opacity-25').addClass('bi-star-fill text-warning');
+        } else {
+            $(this).removeClass('bi-star-fill text-warning').addClass('bi-star text-secondary opacity-25');
+        }
+    });
+}
+
+// ==========================================
+// SUBMIT NEW REVIEW
+// ==========================================
+$(document).on('submit', '#form-submit-review', function(e) {
+    e.preventDefault();
+
+    // 1. Security Check: Are they logged in?
+    let token = localStorage.getItem("nexus_token");
+    let customerId = localStorage.getItem("nexus_user_id");
+    let customerName = localStorage.getItem("nexus_user_name");
+
+    if (!token || !customerId) {
+        Swal.fire({
+            icon: "warning",
+            title: "Login Required",
+            text: "You must be logged in as a customer to leave a review!"
+        });
+        return;
+    }
+
+    // 2. Validate Star Selection
+    let rating = $('#inp-review-rating').val();
+    if (!rating || rating === "0") {
+        $('#rating-error').show();
+        return;
+    }
+
+    // 3. Grab the comment
+    let comment = $('#inp-review-comment').val();
+
+    // 4. Send to Spring Boot
+    $.ajax({
+        url: reviewBaseUrl,
+        method: "POST",
+        headers: {
+            "Authorization": "Bearer " + token
+        },
+        contentType: "application/json",
+        data: JSON.stringify({
+            productId: currentProductId,
+            customerId: customerId,
+            customerName: customerName,
+            rating: parseInt(rating),
+            comment: comment
+        }),
+        success: function(res) {
+
+            // Show a sleek success message
+            Swal.fire({
+                icon: "success",
+                title: "Review Posted!",
+                text: "Thank you for your feedback.",
+                timer: 2000,
+                showConfirmButton: false
+            });
+
+            // Reset the form and interactive stars back to 0
+            $('#form-submit-review')[0].reset();
+            selectedRating = 0;
+            updateStarUI(0);
+            $('#inp-review-rating').val("");
+
+            // THE MAGIC TRICK: Refresh the page data instantly!
+            loadProductReviews(currentProductId); // Draws the new comment at the top
+            loadProductDetails(currentProductId); // Recalculates the average stars at the top of the page!
+        },
+        error: function(xhr) {
+            Swal.fire("Error", "Could not post review. " + (xhr.responseJSON?.message || "Server Error"), "error");
+        }
+    });
+});
