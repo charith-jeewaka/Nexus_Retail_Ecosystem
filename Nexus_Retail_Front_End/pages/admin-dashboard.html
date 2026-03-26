@@ -6,13 +6,16 @@
                 <i class="bi bi-hexagon-fill fs-5 text-white"></i>
             </div>
             <span class="fs-5 fw-bold text-white tracking-tight">Nexus Admin</span>
+            <button class="btn btn-sm btn-outline-primary ms-3 fw-bold" id="btn-toggle-lang">
+                සිං
+            </button>
         </a>
 
         <ul class="nav flex-column mb-auto px-3 gap-2 mt-3">
             <li class="nav-item">
                 <a href="javascript:void(0);" onclick="window.navigateAdmin('admin-overview')" class="nav-link sidebar-link active">
                     <i class="bi bi-speedometer2 link-icon"></i>
-                    <span class="link-text">Dashboard</span>
+                    <span class="link-text"  data-i18n="nav_overview" >Dashboard</span>
                 </a>
             </li>
             <li>
@@ -40,7 +43,7 @@
                 </a>
             </li>
             <li>
-                <a href="javascript:void(0);" class="nav-link sidebar-link" onclick="navigateAdmin('customer-shop')">
+                <a href="javascript:void(0);" class="nav-link sidebar-link">
                     <i class="bi bi-shop link-icon"></i>
                     <span class="link-text">Shop</span>
                 </a>
@@ -56,6 +59,9 @@
                     <h6 class="mb-0 text-white fw-semibold text-truncate" id="display-admin-name" style="font-size: 0.9rem;">Charith Jeewaka</h6>
                     <small class="text-white-50" style="font-size: 0.75rem;">System Administrator</small>
                 </div>
+<!--                <button class="btn btn-sm btn-outline-primary ms-3 fw-bold" id="btn-toggle-lang">-->
+<!--                    සිං-->
+<!--                </button>-->
             </div>
 
             <button class="btn btn-logout-modern w-100 d-flex justify-content-center align-items-center gap-2">
