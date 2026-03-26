@@ -13,8 +13,14 @@ $(document).ready(function () {
         if (subPage === 'shop') {
             loadCustomerProducts();
             updateCartBadge();
+            loadCustomerDetails()
         }
     });
+
+
+    function loadCustomerDetails(){
+        $('#display-customer-name').text(localStorage.getItem("nexus_user_name"));
+    }
 
     // 2. Fetch products (Spring Boot)
     function loadCustomerProducts() {
@@ -64,25 +70,36 @@ $(document).ready(function () {
 
             // Updated Grid classes, Image height (140px), and Font sizes (fs-6, small)
             let card = `
-                <div class="col-6 col-md-4 col-lg-3 col-xl-2"> 
-                    <div class="card h-100 shadow-sm border-0 product-card-hover bg-white">
-                        <img src="${imageSrc}" class="card-img-top p-2" alt="${product.name}" style="height: 140px; object-fit: contain; background-color: #fff;">
-                        <div class="card-body d-flex flex-column p-3">
-                            <span class="badge bg-light text-secondary border mb-2 align-self-start" style="font-size: 0.65rem;">${product.category}</span>
-                            <h6 class="card-title fw-bold text-dark text-truncate mb-1" style="font-size: 0.85rem;" title="${product.name}">${product.name}</h6>
-                            <h6 class="text-primary fw-bold mt-auto mb-3" style="font-size: 0.9rem;">Rs. ${product.unitPrice.toFixed(2)}</h6>
-                            
-                            <button class="btn ${btnClass} w-100 mt-auto fw-semibold rounded-pill" 
-                                    data-id="${product.id}" 
-                                    data-name="${product.name}" 
-                                    data-price="${product.unitPrice}"
-                                    data-image="${imageSrc}">
-                                ${btnText}
-                            </button>
-                        </div>
+            <div class="col-6 col-md-4 col-lg-3 col-xl-2"> 
+                <div class="card h-100 shadow-sm border-0 product-card-hover bg-white">
+                    
+                    <img src="${imageSrc}" class="card-img-top p-2" alt="${product.name}" 
+                         style="height: 140px; object-fit: contain; background-color: #fff; cursor: pointer;"
+                         onclick="localStorage.setItem('current_view_product_id', ${product.id}); window.navigateCustomer('product-details');">
+                    
+                    <div class="card-body d-flex flex-column p-3">
+                        <span class="badge bg-light text-secondary border mb-2 align-self-start" style="font-size: 0.65rem;">${product.category}</span>
+                        
+                        <h6 class="card-title fw-bold text-dark text-truncate mb-1" 
+                            style="font-size: 0.85rem; cursor: pointer;" 
+                            title="${product.name}"
+                            onclick="localStorage.setItem('current_view_product_id', ${product.id}); window.navigateCustomer('product-details');">
+                            ${product.name}
+                        </h6>
+                        
+                        <h6 class="text-primary fw-bold mt-auto mb-3" style="font-size: 0.9rem;">Rs. ${product.unitPrice.toFixed(2)}</h6>
+                        
+                        <button class="btn ${btnClass} w-100 mt-auto fw-semibold rounded-pill" 
+                                data-id="${product.id}" 
+                                data-name="${product.name}" 
+                                data-price="${product.unitPrice}"
+                                data-image="${imageSrc}">
+                            ${btnText}
+                        </button>
                     </div>
                 </div>
-            `;
+            </div>
+        `;
             grid.append(card);
         });
     }

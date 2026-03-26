@@ -50,6 +50,21 @@ public class ProductController {
         return ResponseEntity.ok(response);
     }
 
+    // 3. GET A SINGLE PRODUCT BY ID
+    @GetMapping("/{id}")
+    // Allowing anyone to view a specific product
+    public ResponseEntity<APIResponse> getProductById(@PathVariable Long id) {
+
+        ProductDTO product = productService.getProductById(id);
+
+        APIResponse response = new APIResponse(
+                HttpStatus.OK.value(),
+                "Product retrieved successfully",
+                product
+        );
+        return ResponseEntity.ok(response);
+    }
+
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('ADMIN','CASHIER')")
     public ResponseEntity<APIResponse> updateProduct(@PathVariable Long id ,@Valid @RequestBody ProductDTO productDTO){

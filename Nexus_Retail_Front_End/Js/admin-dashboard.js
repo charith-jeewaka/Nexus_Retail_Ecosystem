@@ -19,6 +19,7 @@ $(document).ready(function(){
     });
 
     function fetchDashboardStatus(){
+        $('#display-admin-name').text(localStorage.getItem("nexus_user_name"));
         $.ajax({
             url: baseUrl,
             method: "GET",

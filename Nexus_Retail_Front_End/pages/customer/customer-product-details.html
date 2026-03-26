@@ -1,0 +1,147 @@
+<div class="container py-4 animate-fade-in" id="product-details-wrapper">
+
+    <button class="btn btn-link text-decoration-none text-muted mb-4 px-0 fw-medium btn-back-hover" onclick="window.navigateCustomer('shop')">
+        <i class="bi bi-arrow-left me-2"></i>Back to Shop
+    </button>
+
+    <div class="row g-5 mb-5 align-items-center">
+
+        <div class="col-md-6">
+            <div class="bg-white p-5 rounded-4 shadow-sm border d-flex justify-content-center align-items-center" style="height: 450px;">
+                <img src="" id="detail-product-image" class="img-fluid" alt="Product Image" style="max-height: 350px; object-fit: contain;">
+            </div>
+        </div>
+
+        <div class="col-md-6 d-flex flex-column justify-content-center">
+            <div class="mb-3">
+                <span class="badge bg-primary bg-opacity-10 text-primary border border-primary-subtle px-3 py-2 rounded-pill shadow-sm" id="detail-product-category" style="letter-spacing: 0.5px;">Category</span>
+            </div>
+
+            <h1 class="fw-bold text-dark mb-2 tracking-tight" id="detail-product-name" style="font-size: 2.5rem;">Loading Product...</h1>
+
+            <div class="d-flex align-items-center mb-4">
+                <div class="text-warning me-2 fs-5" id="detail-stars-container">
+                    <i class="bi bi-star text-secondary opacity-25"></i>
+                </div>
+                <span class="text-muted fw-medium mt-1" id="detail-review-count">(0 Reviews)</span>
+            </div>
+
+            <h2 class="text-primary fw-bold mb-4 fs-1" id="detail-product-price">Rs. 0.00</h2>
+
+            <div class="d-flex align-items-center mb-5 pb-4 border-bottom">
+                <span class="me-3 fw-medium text-secondary">Availability:</span>
+                <span class="badge px-3 py-2 rounded-pill fs-6" id="detail-product-stock">Checking...</span>
+            </div>
+
+            <div class="d-flex gap-3 mt-auto">
+                <div class="input-group shadow-sm rounded-3 overflow-hidden" style="width: 140px; border: 1.5px solid #e2e8f0;">
+                    <button class="btn btn-light bg-white border-0 px-3 text-secondary" type="button" id="btn-qty-minus"><i class="bi bi-dash fs-5"></i></button>
+                    <input type="text" class="form-control text-center border-0 fw-bold fs-5 bg-white" id="inp-detail-qty" value="1" readonly>
+                    <button class="btn btn-light bg-white border-0 px-3 text-secondary" type="button" id="btn-qty-plus"><i class="bi bi-plus fs-5"></i></button>
+                </div>
+                <button class="btn btn-primary flex-grow-1 fw-bold rounded-3 shadow-sm btn-hover-lift fs-5 d-flex justify-content-center align-items-center" id="btn-detail-add-cart">
+                    <i class="bi bi-cart-plus me-2 fs-4"></i> Add to Cart
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row g-5 mt-3">
+
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm rounded-4 bg-white sticky-top" style="top: 100px;">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold text-dark mb-4 d-flex align-items-center">
+                        <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex justify-content-center align-items-center me-3" style="width: 40px; height: 40px;">
+                            <i class="bi bi-pencil-square"></i>
+                        </div>
+                        Write a Review
+                    </h5>
+
+                    <form id="form-submit-review">
+                        <div class="mb-4 text-center p-3 bg-light rounded-4">
+                            <label class="form-label fw-bold text-dark mb-2">Tap to Rate</label>
+                            <div class="d-flex justify-content-center gap-2 fs-2 text-secondary" id="interactive-star-rating">
+                                <i class="bi bi-star interactive-star" data-rating="1" style="cursor: pointer;"></i>
+                                <i class="bi bi-star interactive-star" data-rating="2" style="cursor: pointer;"></i>
+                                <i class="bi bi-star interactive-star" data-rating="3" style="cursor: pointer;"></i>
+                                <i class="bi bi-star interactive-star" data-rating="4" style="cursor: pointer;"></i>
+                                <i class="bi bi-star interactive-star" data-rating="5" style="cursor: pointer;"></i>
+                            </div>
+                            <input type="hidden" id="inp-review-rating" required>
+                            <div class="invalid-feedback" id="rating-error">Please select a star rating.</div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="inp-review-comment" class="form-label fw-bold text-dark">Your Experience</label>
+                            <textarea class="form-control custom-input bg-light border-0" id="inp-review-comment" rows="4" placeholder="What did you love or hate about this product?" required></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-dark w-100 fw-bold rounded-pill py-2 btn-hover-lift" id="btn-submit-review">
+                            Post Review
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            <div class="d-flex justify-content-between align-items-end mb-4 border-bottom pb-3">
+                <h4 class="fw-bold text-dark m-0">Customer Feedback</h4>
+            </div>
+
+            <div id="review-list-container" class="d-flex flex-column gap-3">
+                <div class="text-center py-5 text-muted">
+                    <div class="spinner-border text-primary mb-3" role="status"></div>
+                    <p class="fw-medium">Fetching authentic reviews...</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<style>
+    /* Smooth entrance animation */
+    .animate-fade-in {
+        animation: fadeIn 0.4s ease-in-out;
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Typography and Layout Utilities */
+    .tracking-tight { letter-spacing: -0.03em; }
+
+    .btn-back-hover { transition: color 0.2s ease; }
+    .btn-back-hover:hover { color: #0d6efd !important; }
+
+    .btn-hover-lift { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+    .btn-hover-lift:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 15px rgba(0,0,0,0.1) !important;
+    }
+
+    /* Custom Input styling from your previous forms */
+    .custom-input:focus {
+        background-color: #fff !important;
+        box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.15);
+        outline: none;
+    }
+
+    /* Review Card Styling (Used by JS later) */
+    .review-card {
+        transition: background-color 0.2s ease;
+        border: 1px solid rgba(0,0,0,0.05);
+    }
+    .review-card:hover {
+        background-color: #f8fafc;
+    }
+
+    /* Interactive Stars Hover Effects */
+    .interactive-star { transition: color 0.1s ease, transform 0.1s ease; }
+    .interactive-star:hover { transform: scale(1.15); }
+    .interactive-star.active { color: #ffc107 !important; }
+</style>
