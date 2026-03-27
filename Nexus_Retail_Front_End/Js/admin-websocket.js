@@ -55,6 +55,7 @@ function handleIncomingAlert(payload) {
             timer: 8000 // Stays on screen for 8 seconds
         }).then((result) => {
             if (result.isConfirmed) {
+                window.navigateAdmin('admin-orders')
                 // If they click "View", navigate them to the Orders page!
                 // window.navigateAdmin('orders');
             }

@@ -9,10 +9,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/orders")
@@ -36,5 +35,39 @@ public class OrderController {
         );
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    // ... existing placeOrder endpoint ...
+
+    // 2. GET ALL ORDERS (Admin/Cashier only)
+    @GetMapping
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'CASHIER')")
+    public ResponseEntity<APIResponse> getAllOrders() {
+
+        List<OrderResponseDTO> orders = orderService.getAllOrders();
+
+        APIResponse response = new APIResponse(
+                HttpStatus.OK.value(),
+                "Orders retrieved successfully",
+                orders
+        );
+        return ResponseEntity.ok(response);
+    }
+
+    // 3. UPDATE ORDER STATUS (Admin/Cashier only)
+    @PutMapping("/{orderId}/status")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'CASHIER')")
+    public ResponseEntity<APIResponse> updateOrderStatus(
+            @PathVariable Long orderId,
+            @RequestParam String status) { // We catch the status from the URL query parameter
+
+        OrderResponseDTO updatedOrder = orderService.updateOrderStatus(orderId, status);
+
+        APIResponse response = new APIResponse(
+                HttpStatus.OK.value(),
+                "Order status updated",
+                updatedOrder
+        );
+        return ResponseEntity.ok(response);
     }
 }

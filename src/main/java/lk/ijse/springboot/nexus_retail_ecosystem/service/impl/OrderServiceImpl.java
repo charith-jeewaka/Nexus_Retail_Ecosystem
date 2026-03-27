@@ -12,6 +12,7 @@ import lk.ijse.springboot.nexus_retail_ecosystem.service.EmailService;
 import lk.ijse.springboot.nexus_retail_ecosystem.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
+import org.springframework.data.domain.Sort;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +21,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -106,10 +108,58 @@ public class OrderServiceImpl implements OrderService {
 
         return OrderResponseDTO.builder()
                 .orderId(savedOrder.getId())
+                .customerName(customer.getUsername())
                 .status(savedOrder.getStatus().name())
                 .totalAmount(savedOrder.getTotalAmount())
                 .orderDate(savedOrder.getOrderDate())
                 .message("Order placed Successfully")
+                .build();
+    }
+
+    @Override
+    public List<OrderResponseDTO> getAllOrders() {
+        // Fetch all orders from the database, sorted from newest to oldest!
+        List<Order> orders = orderRepository.findAll(Sort.by(Sort.Direction.DESC, "orderDate"));
+
+        // Convert the Entities into clean DTOs for the frontend
+        return orders.stream().map(order -> OrderResponseDTO.builder()
+                .orderId(order.getId())
+                .customerName(order.getUser().getUsername())
+                .status(order.getStatus().name())
+                .totalAmount(order.getTotalAmount())
+                .orderDate(order.getOrderDate())
+                .message("Order retrieved")
+                .build()
+        ).collect(Collectors.toList());
+    }
+
+    @Override
+    public OrderResponseDTO updateOrderStatus(Long orderId, String newStatus) {
+        // 1. Find the order
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found with ID: " + orderId));
+
+        // 2. Safely convert the String status from the frontend into our Java Enum
+        try {
+            OrderStatus statusEnum = OrderStatus.valueOf(newStatus.toUpperCase());
+            order.setStatus(statusEnum);
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("Invalid status provided: " + newStatus);
+        }
+
+        // 3. Save the updated status to the database
+        Order updatedOrder = orderRepository.save(order);
+
+        // Optional: If you want to trigger an email when the order is "COMPLETED", you can call your EmailService here!
+
+        // 4. Return the updated data
+        return OrderResponseDTO.builder()
+                .orderId(updatedOrder.getId())
+                .customerName(updatedOrder.getUser().getUsername())
+                .status(updatedOrder.getStatus().name())
+                .totalAmount(updatedOrder.getTotalAmount())
+                .orderDate(updatedOrder.getOrderDate())
+                .message("Order status updated to " + updatedOrder.getStatus().name())
                 .build();
     }
 

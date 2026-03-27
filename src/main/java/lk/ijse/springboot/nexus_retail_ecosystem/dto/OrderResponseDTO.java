@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 public class OrderResponseDTO {
 
     private Long orderId;
+    private String customerName; // <-- NEW FIELD!
     private String status;
     private BigDecimal totalAmount;
     private LocalDateTime orderDate;
