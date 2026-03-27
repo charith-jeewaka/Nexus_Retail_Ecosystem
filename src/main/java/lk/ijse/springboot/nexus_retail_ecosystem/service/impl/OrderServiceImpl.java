@@ -1,6 +1,7 @@
 package lk.ijse.springboot.nexus_retail_ecosystem.service.impl;
 
 import lk.ijse.springboot.nexus_retail_ecosystem.dto.OrderItemRequestDTO;
+import lk.ijse.springboot.nexus_retail_ecosystem.dto.OrderItemResponseDTO;
 import lk.ijse.springboot.nexus_retail_ecosystem.dto.OrderRequestDTO;
 import lk.ijse.springboot.nexus_retail_ecosystem.dto.OrderResponseDTO;
 import lk.ijse.springboot.nexus_retail_ecosystem.entity.*;
@@ -161,6 +162,24 @@ public class OrderServiceImpl implements OrderService {
                 .orderDate(updatedOrder.getOrderDate())
                 .message("Order status updated to " + updatedOrder.getStatus().name())
                 .build();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<OrderItemResponseDTO> getOrderItems(Long orderId) {
+        // 1. Find the order
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found with ID: " + orderId));
+
+        // 2. Map the OrderDetails to our clean DTOs
+        return order.getOrderDetails().stream().map(detail -> OrderItemResponseDTO.builder()
+                .productId(detail.getProduct().getId())
+                .productName(detail.getProduct().getName())
+                .quantity(detail.getQuantity())
+                .unitPrice(detail.getUnitPrice())
+                .subTotal(detail.getSubtotal())
+                .build()
+        ).collect(Collectors.toList());
     }
 
 

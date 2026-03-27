@@ -138,6 +138,43 @@ $(document).ready(function () {
         let modal = new bootstrap.Modal(document.getElementById('viewOrderModal'));
         modal.show();
 
+        // --- FETCH THE ITEMS FOR THIS ORDER ---
+        let tbody = $('#modal-order-items-body');
+        let token = localStorage.getItem("nexus_token");
+
+        // Show a quick loading spinner inside the table
+        tbody.html('<tr><td colspan="3" class="text-center py-3 text-muted"><div class="spinner-border spinner-border-sm text-primary me-2"></div> Loading items...</td></tr>');
+
+        $.ajax({
+            url: `${orderApiUrl}/${orderId}/items`,
+            method: "GET",
+            headers: {
+                "Authorization": "Bearer " + token
+            },
+            success: function (res) {
+                tbody.empty(); // Clear the loader
+
+                if (res.code === 200 && res.data.length > 0) {
+                    res.data.forEach(item => {
+                        let row = `
+                            <tr class="border-bottom">
+                                <td class="ps-3 py-2 text-muted small">#${item.productId}</td>
+                                <td class="py-2 text-dark fw-medium">${item.productName}</td>
+                                <td class="py-2 text-center text-muted">x${item.quantity}</td>
+                                <td class="py-2 text-end pe-3 text-secondary">Rs. ${item.subTotal.toFixed(2)}</td>
+                            </tr>
+                        `;
+                        tbody.append(row);
+                    });
+                } else {
+                    tbody.html('<tr><td colspan="3" class="text-center py-3 text-muted">No items found.</td></tr>');
+                }
+            },
+            error: function () {
+                tbody.html('<tr><td colspan="3" class="text-center py-3 text-danger">Failed to load items.</td></tr>');
+            }
+        });
+
         // Note: The specific items list inside the modal is currently blank. 
         // We will need to fetch the OrderDetails from the backend to populate it!
     });

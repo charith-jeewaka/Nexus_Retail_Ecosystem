@@ -2,6 +2,7 @@ package lk.ijse.springboot.nexus_retail_ecosystem.controller;
 
 import jakarta.validation.Valid;
 import lk.ijse.springboot.nexus_retail_ecosystem.dto.APIResponse;
+import lk.ijse.springboot.nexus_retail_ecosystem.dto.OrderItemResponseDTO;
 import lk.ijse.springboot.nexus_retail_ecosystem.dto.OrderRequestDTO;
 import lk.ijse.springboot.nexus_retail_ecosystem.dto.OrderResponseDTO;
 import lk.ijse.springboot.nexus_retail_ecosystem.service.OrderService;
@@ -67,6 +68,21 @@ public class OrderController {
                 HttpStatus.OK.value(),
                 "Order status updated",
                 updatedOrder
+        );
+        return ResponseEntity.ok(response);
+    }
+
+    // 4. GET SPECIFIC ORDER ITEMS (Admin/Cashier only)
+    @GetMapping("/{orderId}/items")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'CASHIER')")
+    public ResponseEntity<APIResponse> getOrderItems(@PathVariable Long orderId) {
+
+        List<OrderItemResponseDTO> items = orderService.getOrderItems(orderId);
+
+        APIResponse response = new APIResponse(
+                HttpStatus.OK.value(),
+                "Order items retrieved",
+                items
         );
         return ResponseEntity.ok(response);
     }
