@@ -141,17 +141,51 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found with ID: " + orderId));
 
         // 2. Safely convert the String status from the frontend into our Java Enum
+        OrderStatus statusEnum;
         try {
-            OrderStatus statusEnum = OrderStatus.valueOf(newStatus.toUpperCase());
-            order.setStatus(statusEnum);
+            statusEnum = OrderStatus.valueOf(newStatus.toUpperCase());
         } catch (IllegalArgumentException e) {
             throw new RuntimeException("Invalid status provided: " + newStatus);
         }
 
+        OrderStatus currentStatus = order.getStatus();
+
+        // --- NEW LOGIC: Strict State Machine Rules ---
+
+        // Rule A: Prevent redundant updates
+        if (currentStatus == statusEnum) {
+            throw new IllegalStateException("Order #" + orderId + " is already marked as " + statusEnum.name() + ".");
+        }
+
+        // Rule B: Prevent reverting from PROCESSING back to PENDING
+        if (currentStatus == OrderStatus.PROCESSING && statusEnum == OrderStatus.PENDING) {
+            throw new IllegalStateException("Order #" + orderId + " is already being processed and cannot be reverted to PENDING.");
+        }
+
+        // Rule C: Prevent ANY changes if the order is already COMPLETED
+        if (currentStatus == OrderStatus.COMPLETED) {
+            throw new IllegalStateException("Order #" + orderId + " is already COMPLETED and cannot be changed back to " + statusEnum.name() + ".");
+        }
+
+        // Rule D: Prevent ANY changes if the order is already CANCELLED
+        if (currentStatus == OrderStatus.CANCELLED) {
+            throw new IllegalStateException("Order #" + orderId + " is CANCELLED and cannot be modified.");
+        }
+
         // 3. Save the updated status to the database
+        order.setStatus(statusEnum);
         Order updatedOrder = orderRepository.save(order);
 
-        // Optional: If you want to trigger an email when the order is "COMPLETED", you can call your EmailService here!
+        // --- Trigger Email based on the new Status ---
+        if (statusEnum == OrderStatus.PROCESSING) {
+            emailService.sendOrderProcessingEmail(
+                    updatedOrder.getUser().getEmail(),
+                    updatedOrder.getUser().getUsername(),
+                    updatedOrder.getId()
+            );
+        }
+
+        // Optional: Trigger a different email when COMPLETED
 
         // 4. Return the updated data
         return OrderResponseDTO.builder()

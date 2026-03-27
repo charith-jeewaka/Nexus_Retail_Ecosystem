@@ -182,6 +182,9 @@ $(document).ready(function () {
     // ==========================================
     // 4. SUBMIT STATUS UPDATE
     // ==========================================
+    // ==========================================
+    // 4. SUBMIT STATUS UPDATE
+    // ==========================================
     $(document).on('submit', '#form-update-order-status', function (e) {
         e.preventDefault();
 
@@ -220,8 +223,30 @@ $(document).ready(function () {
                 loadAdminOrders();
             },
             error: function (xhr) {
+                // 1. Put the button back to normal
                 submitBtn.html(originalText).prop('disabled', false);
-                Swal.fire("Error", "Could not update status.", "error");
+
+                // 2. Try to grab the exact error message from Spring Boot
+                let errorMessage = "Could not update the order status at this time.";
+
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                    errorMessage = xhr.responseJSON.message; // Grabs your GlobalExceptionHandler message
+                } else if (xhr.responseText) {
+                    try {
+                        let parsed = JSON.parse(xhr.responseText);
+                        if (parsed.message) errorMessage = parsed.message; // Grabs default Spring Boot error message
+                    } catch (e) {
+                        // If it's not JSON, ignore it and use the default message
+                    }
+                }
+
+                // 3. Show a helpful warning to the cashier
+                Swal.fire({
+                    icon: "warning",
+                    title: "Update Failed",
+                    text: errorMessage,
+                    confirmButtonColor: "#0d6efd"
+                });
             }
         });
     });

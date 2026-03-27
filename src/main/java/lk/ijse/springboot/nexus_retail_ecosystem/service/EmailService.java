@@ -135,4 +135,41 @@ public class EmailService {
             System.err.println("Failed to send HTML order email to " + toEmail + ": " + e.getMessage());
         }
     }
+
+
+    @Async
+    public void sendOrderProcessingEmail(String toEmail, String customerName, Long orderId) {
+        try {
+            // Using MimeMessage for professional HTML formatting
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+            helper.setFrom(senderEmail);
+            helper.setTo(toEmail);
+            helper.setSubject("Great News! Your Nexus Order #" + orderId + " is Processing");
+
+            // Build the HTML email body
+            StringBuilder html = new StringBuilder();
+            html.append("<div style='font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 10px;'>");
+
+            html.append("<h2 style='color: #0d6efd; text-align: center;'>We're packing your order! 📦</h2>");
+            html.append("<p style='font-size: 16px; color: #333;'>Hello <b>").append(customerName).append("</b>,</p>");
+            html.append("<p style='font-size: 16px; color: #555;'>Great news! Your order <b>#").append(orderId).append("</b> has been reviewed by our team and is currently <b>PROCESSING</b>. We are carefully packing your items right now.</p>");
+
+            html.append("<p style='font-size: 16px; color: #555;'>We will send you another update the moment your order is complete and ready for you!</p>");
+
+            html.append("<hr style='border: none; border-top: 1px solid #e2e8f0; margin: 20px 0;'>");
+            html.append("<p style='font-size: 14px; color: #888; text-align: center;'>Thank you for shopping with Nexus Retail Ecosystem.<br><b>The Nexus Team</b></p>");
+
+            html.append("</div>");
+
+            helper.setText(html.toString(), true); // 'true' enables HTML
+
+            mailSender.send(message);
+            System.out.println("Processing email sent successfully to " + toEmail);
+
+        } catch (Exception e) {
+            System.err.println("Failed to send Processing email to " + toEmail + ": " + e.getMessage());
+        }
+    }
 }
