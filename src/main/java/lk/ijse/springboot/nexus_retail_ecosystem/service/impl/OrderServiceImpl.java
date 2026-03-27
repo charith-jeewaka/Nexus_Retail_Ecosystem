@@ -8,6 +8,7 @@ import lk.ijse.springboot.nexus_retail_ecosystem.exception.ResourceNotFoundExcep
 import lk.ijse.springboot.nexus_retail_ecosystem.repository.OrderRepository;
 import lk.ijse.springboot.nexus_retail_ecosystem.repository.ProductRepository;
 import lk.ijse.springboot.nexus_retail_ecosystem.repository.UserRepository;
+import lk.ijse.springboot.nexus_retail_ecosystem.service.EmailService;
 import lk.ijse.springboot.nexus_retail_ecosystem.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,7 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
+    private final EmailService emailService;
 
     @Override
     @Transactional
@@ -86,6 +88,13 @@ public class OrderServiceImpl implements OrderService {
 
         //  Save to Database! (Because of CascadeType.ALL, this saves the OrderDetails automatically too!)
         Order savedOrder = orderRepository.save(newOrder);
+
+        // Fire off the email in the background!
+        emailService.sendOrderConfirmationHtml(
+                customer.getEmail(),
+                customer.getUsername(),
+                savedOrder
+        );
 
         //return the clean response to the front end
 
