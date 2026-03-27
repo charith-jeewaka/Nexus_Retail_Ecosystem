@@ -2,12 +2,12 @@
 const translations = {
     "en": {
         "nav_overview": "Dashboard",
-        "welcome": "Welcome Back!",
+        "search_bar": "Search Product by name",
         "btn_add_cart": "Add to Cart"
     },
     "si": {
-        "nav_overview": "වෙළඳසැල",
-        "btn_add_cart": "කරත්තයට එක් කරන්න"
+        "nav_overview": "ප්රධාන පුවරුව",
+        "search_bar": "කරත්තයට එක් කරන්න"
     }
 };
 
