@@ -113,21 +113,82 @@ $(document).ready(function() {
         loadCartItems(); // Redraw the table
     });
 
-    // 4. Fake Checkout Button (For now!)
+    // 4. THE REAL CHECKOUT BUTTON
     $(document).on('click', '#btn-checkout', function() {
-        Swal.fire({
-            title: "Ready to Order?",
-            text: "This will send your order to the backend!",
-            icon: "info",
-            showCancelButton: true,
-            confirmButtonText: "Yes, Place Order"
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // We will add the actual AJAX POST request here later!
-                Swal.fire("Success!", "Your order has been placed.", "success");
-                localStorage.removeItem('nexus_cart'); // Clear cart
-                loadCartItems(); // Redraw UI
-                window.updateCartBadge(); // Clear red badge
+
+        // 1. Grab the cart and user details from Local Storage
+        let cart = JSON.parse(localStorage.getItem('nexus_cart')) || [];
+        let customerId = localStorage.getItem("nexus_user_id");
+        let token = localStorage.getItem("nexus_token");
+
+        // 2. Safety Checks
+        if (cart.length === 0) {
+            Swal.fire("Cart Empty", "Add some items before checking out!", "warning");
+            return;
+        }
+
+        if (!customerId || !token) {
+            Swal.fire("Login Required", "Please log in to place an order.", "warning");
+            return;
+        }
+
+        // 3. Format the data to perfectly match your OrderRequestDTO in Spring Boot!
+        // We only send the ID and Quantity. Spring Boot handles the prices securely!
+        let formattedItems = cart.map(item => {
+            return {
+                productId: item.id,
+                quantity: item.qty
+            };
+        });
+
+        let orderPayload = {
+            customerId: parseInt(customerId),
+            items: formattedItems
+        };
+
+        // 4. Show a loading state so the user doesn't click twice
+        let checkoutBtn = $(this);
+        let originalText = checkoutBtn.html();
+        checkoutBtn.html('<span class="spinner-border spinner-border-sm me-2"></span> Processing...').prop('disabled', true);
+
+        // 5. Send to Spring Boot
+        $.ajax({
+            url: "http://localhost:8080/api/v1/orders",
+            method: "POST",
+            headers: {
+                "Authorization": "Bearer " + token,
+                "Content-Type": "application/json"
+            },
+            data: JSON.stringify(orderPayload),
+            success: function(res) {
+                // SUCCESS!
+                let orderData = res.data;
+
+                Swal.fire({
+                    icon: "success",
+                    title: "Order Placed!",
+                    text: `Your order #${orderData.orderId} has confirmed. Total: Rs. ${orderData.totalAmount.toFixed(2)}`,
+                    confirmButtonText: "Continue Shopping",
+                    confirmButtonColor: "#0d6efd"
+                }).then(() => {
+                    // Clear the cart from browser memory
+                    localStorage.removeItem('nexus_cart');
+
+                    // Update UI
+                    loadCartItems();
+                    if(window.updateCartBadge) window.updateCartBadge();
+
+                    // Send them back to the shop
+                    window.navigateCustomer('shop');
+                });
+            },
+            error: function(xhr) {
+                // Put the button back to normal if it fails
+                checkoutBtn.html(originalText).prop('disabled', false);
+
+                // Try to grab the exact error message from Spring Boot
+                let errorMsg = xhr.responseJSON?.message || "Could not process order at this time.";
+                Swal.fire("Checkout Failed", errorMsg, "error");
             }
         });
     });
