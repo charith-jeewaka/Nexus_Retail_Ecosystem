@@ -51,7 +51,7 @@ public class AuthenticationService {
                 .roles(savedUser.getRole().name())
                 .build();
 
-        emailService.sendWelcomeEmail(savedUser.getEmail(), savedUser.getUsername());
+//        emailService.sendWelcomeEmail(savedUser.getEmail(), savedUser.getUsername());
 
         var jwtToken = jwtService.generateToken(userDetails);
 

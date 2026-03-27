@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,11 +26,11 @@ public class Order {
     private User user;
 
     @Column(nullable = false)
-    private LocalDate orderDate;
+    private LocalDateTime orderDate;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private OrderStaus Status;
+    private OrderStatus status;
 
     @Column(nullable = false)
     private BigDecimal totalAmount;
