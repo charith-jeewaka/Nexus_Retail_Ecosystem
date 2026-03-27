@@ -11,6 +11,8 @@ import lk.ijse.springboot.nexus_retail_ecosystem.repository.UserRepository;
 import lk.ijse.springboot.nexus_retail_ecosystem.service.EmailService;
 import lk.ijse.springboot.nexus_retail_ecosystem.service.OrderService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.MessageSource;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +29,8 @@ public class OrderServiceImpl implements OrderService {
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
     private final EmailService emailService;
+    private final SimpMessagingTemplate simpMessagingTemplate;
+    private final MessageSource messageSource;
 
     @Override
     @Transactional
@@ -90,11 +94,13 @@ public class OrderServiceImpl implements OrderService {
         Order savedOrder = orderRepository.save(newOrder);
 
         // Fire off the email in the background!
-        emailService.sendOrderConfirmationHtml(
-                customer.getEmail(),
-                customer.getUsername(),
-                savedOrder
-        );
+//        emailService.sendOrderConfirmationHtml(
+//                customer.getEmail(),
+//                customer.getUsername(),
+//                savedOrder
+//        );
+
+        simpMessagingTemplate.convertAndSend("/topic/orders","NEW_ORDER:" +savedOrder.getId());
 
         //return the clean response to the front end
 

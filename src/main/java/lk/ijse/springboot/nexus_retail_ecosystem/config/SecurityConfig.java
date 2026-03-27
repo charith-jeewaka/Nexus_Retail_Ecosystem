@@ -40,6 +40,8 @@ public class SecurityConfig {
                         .requestMatchers("/uploads/**").permitAll() // to view images
                         .requestMatchers(HttpMethod.GET, "/api/v1/products/**").permitAll() // Customers can view products!
                         .requestMatchers(HttpMethod.GET, "/api/v1/reviews/product/**").permitAll()
+                        //whitelist the websocket
+                        .requestMatchers("/ws-nexus/**").permitAll()
                         .anyRequest().authenticated() // Everything else requires a valid token
                 )
                 .sessionManagement(session -> session
