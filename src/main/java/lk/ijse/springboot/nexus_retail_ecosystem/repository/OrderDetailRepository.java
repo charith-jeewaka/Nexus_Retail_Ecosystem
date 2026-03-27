@@ -1,13 +1,12 @@
 package lk.ijse.springboot.nexus_retail_ecosystem.repository;
 
-import lk.ijse.springboot.nexus_retail_ecosystem.entity.Order;
+import lk.ijse.springboot.nexus_retail_ecosystem.entity.OrderDetail;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface OrderRepository extends JpaRepository<Order,Long> {
-
-    List<Order> findByUser_IdOrderByOrderDateDesc(Long userId);
+public interface OrderDetailRepository extends JpaRepository<OrderDetail,Long> {
+    List<OrderDetail> findByOrder_Id(Long orderId);
 }
