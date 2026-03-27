@@ -63,9 +63,9 @@ function handleIncomingAlert(payload) {
 
         // 3. THE MAGIC TRICK: Refresh the Admin's Data Table instantly!
         // If they are currently looking at the orders page, refresh it so the new order appears!
-        // if (typeof loadAdminOrders === "function") {
-        //     loadAdminOrders();
-        // }
+        if (typeof loadAdminOrders === "function") {
+            loadAdminOrders();
+        }
     }
 }
 
