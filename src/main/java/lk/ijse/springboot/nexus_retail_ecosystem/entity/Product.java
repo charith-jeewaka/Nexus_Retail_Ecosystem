@@ -32,4 +32,7 @@ public class Product {
 
     private String imageUrl;
 
+    @Column(nullable = false)
+    private boolean active = true; // Default to true so new products show up!
+
 }

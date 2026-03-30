@@ -177,13 +177,13 @@ public class OrderServiceImpl implements OrderService {
         Order updatedOrder = orderRepository.save(order);
 
         // --- Trigger Email based on the new Status ---
-        if (statusEnum == OrderStatus.PROCESSING) {
-            emailService.sendOrderProcessingEmail(
-                    updatedOrder.getUser().getEmail(),
-                    updatedOrder.getUser().getUsername(),
-                    updatedOrder.getId()
-            );
-        }
+//        if (statusEnum == OrderStatus.PROCESSING) {
+//            emailService.sendOrderProcessingEmail(
+//                    updatedOrder.getUser().getEmail(),
+//                    updatedOrder.getUser().getUsername(),
+//                    updatedOrder.getId()
+//            );
+//        }
 
         // Optional: Trigger a different email when COMPLETED
 

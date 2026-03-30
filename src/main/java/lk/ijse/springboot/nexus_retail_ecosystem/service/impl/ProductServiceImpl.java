@@ -2,11 +2,9 @@ package lk.ijse.springboot.nexus_retail_ecosystem.service.impl;
 
 import lk.ijse.springboot.nexus_retail_ecosystem.dto.ProductDTO;
 import lk.ijse.springboot.nexus_retail_ecosystem.entity.Product;
-import lk.ijse.springboot.nexus_retail_ecosystem.entity.Review;
 import lk.ijse.springboot.nexus_retail_ecosystem.exception.DuplicateResourceException;
 import lk.ijse.springboot.nexus_retail_ecosystem.exception.ResourceNotFoundException;
 import lk.ijse.springboot.nexus_retail_ecosystem.repository.ProductRepository;
-import lk.ijse.springboot.nexus_retail_ecosystem.repository.ReviewRepository;
 import lk.ijse.springboot.nexus_retail_ecosystem.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,14 +17,12 @@ import java.util.stream.Collectors;
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
-    private final ReviewRepository reviewRepository;
 
     @Override
     public ProductDTO saveProduct(ProductDTO productDTO) {
-
-        //check duplicates
-        if (productRepository.existsByName(productDTO.getName())) {
-            throw new DuplicateResourceException("A product with the name '" + productDTO.getName() + "' already exists!");
+        // Updated: Check duplicates only against products that are currently active
+        if (productRepository.existsByNameAndActiveTrue(productDTO.getName())) {
+            throw new DuplicateResourceException("An active product with the name '" + productDTO.getName() + "' already exists!");
         }
 
         Product product = Product.builder()
@@ -35,25 +31,67 @@ public class ProductServiceImpl implements ProductService {
                 .unitPrice(productDTO.getUnitPrice())
                 .unitsInStock(productDTO.getUnitsInStock())
                 .imageUrl(productDTO.getImageUrl())
+                .active(true) // Ensure it is active on creation
                 .build();
 
-        //saving to database and re sending the saved data to the frontend to get correced and updted data
         Product savedProduct = productRepository.save(product);
-
         return mapToDTO(savedProduct);
     }
 
     @Override
     public List<ProductDTO> getAllProducts() {
-        List<Product> products = productRepository.findAll();
+        // Updated: Only return products that are active (Soft Delete filter)
+        List<Product> products = productRepository.findAllByActiveTrue();
 
-        // Convert the list of Entities into a list of DTOs
         return products.stream()
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
     }
 
-    // A handy helper method to keep our code clean!
+    @Override
+    public void deleteProduct(Long id) {
+        // 1. Find the product
+        Product existingProduct = productRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found with ID: " + id));
+
+        // 2. Perform Soft Delete
+        // We do NOT delete reviews or the product record.
+        // We just set active to false so it disappears from the shop.
+        existingProduct.setActive(false);
+        productRepository.save(existingProduct);
+    }
+
+    @Override
+    public ProductDTO getProductById(Long id) {
+        // Usually, we still allow getting by ID for order history,
+        // but you can add .filter(Product::isActive) if you want it strictly hidden.
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found with ID: " + id));
+
+        return mapToDTO(product);
+    }
+
+    @Override
+    public ProductDTO updateProduct(Long id, ProductDTO productDTO) {
+        Product existingProduct = productRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found with ID: " + id));
+
+        // Logic remains similar, ensuring we check name duplicates against other active products
+        if (!existingProduct.getName().equals(productDTO.getName()) &&
+                productRepository.existsByNameAndActiveTrue(productDTO.getName())) {
+            throw new DuplicateResourceException("Another active product already uses this name.");
+        }
+
+        existingProduct.setName(productDTO.getName());
+        existingProduct.setCategory(productDTO.getCategory());
+        existingProduct.setUnitPrice(productDTO.getUnitPrice());
+        existingProduct.setUnitsInStock(productDTO.getUnitsInStock());
+        existingProduct.setImageUrl(productDTO.getImageUrl());
+
+        Product updatedProduct = productRepository.save(existingProduct);
+        return mapToDTO(updatedProduct);
+    }
+
     private ProductDTO mapToDTO(Product product) {
         return ProductDTO.builder()
                 .id(product.getId())
@@ -63,55 +101,5 @@ public class ProductServiceImpl implements ProductService {
                 .unitsInStock(product.getUnitsInStock())
                 .imageUrl(product.getImageUrl())
                 .build();
-    }
-
-    @Override
-    public ProductDTO updateProduct(Long id, ProductDTO productDTO) {
-        // 1. Find the product or throw our new 404 exception
-        Product existingProduct = productRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Product not found with ID: " + id));
-
-        // 2. Optional: Check if they are changing the name to a name that already exists!
-        if (!existingProduct.getName().equals(productDTO.getName()) && productRepository.existsByName(productDTO.getName())) {
-            throw new DuplicateResourceException("A product with the name '" + productDTO.getName() + "' already exists!");
-        }
-
-        // 3. Update the fields
-        existingProduct.setName(productDTO.getName());
-        existingProduct.setCategory(productDTO.getCategory());
-        existingProduct.setUnitPrice(productDTO.getUnitPrice());
-        existingProduct.setUnitsInStock(productDTO.getUnitsInStock()); // Optional: Usually stock is updated via a separate Inventory system, but fine for now!
-        existingProduct.setImageUrl(productDTO.getImageUrl());
-
-        // 4. Save and return as DTO
-        Product updatedProduct = productRepository.save(existingProduct);
-        return mapToDTO(updatedProduct);
-    }
-
-    @Override
-    public void deleteProduct(Long id) {
-        // 1. Check if the product exists first
-        if (!productRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Product not found with ID: " + id);
-        }
-
-        // find all reviews attached to the item
-        List<Review> reviews = reviewRepository.findByProduct_Id(id);
-
-        // delete the reviews related to the item first
-        if (!reviews.isEmpty()) {
-            reviewRepository.deleteAll(reviews);
-        }
-
-        // delete the product
-        productRepository.deleteById(id);
-    }
-
-    @Override
-    public ProductDTO getProductById(Long id) {
-        Product product = productRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Product not found with ID: " + id));
-
-        return mapToDTO(product);
     }
 }
