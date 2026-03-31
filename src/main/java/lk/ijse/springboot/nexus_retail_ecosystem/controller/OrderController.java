@@ -74,7 +74,7 @@ public class OrderController {
 
     // 4. GET SPECIFIC ORDER ITEMS (Admin/Cashier only)
     @GetMapping("/{orderId}/items")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'CASHIER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'CASHIER' ,'CUSTOMER')")
     public ResponseEntity<APIResponse> getOrderItems(@PathVariable Long orderId) {
 
         List<OrderItemResponseDTO> items = orderService.getOrderItems(orderId);
@@ -84,6 +84,22 @@ public class OrderController {
                 "Order items retrieved",
                 items
         );
+        return ResponseEntity.ok(response);
+    }
+
+
+    @GetMapping("/customer/{userId}")
+    @PreAuthorize("hasAuthority('CUSTOMER')")
+    public ResponseEntity<APIResponse> getCustomerOrderHistory(@PathVariable Long userId) {
+
+        List<OrderResponseDTO> history = orderService.getOrdersByUserId(userId);
+
+        APIResponse response = new APIResponse(
+                HttpStatus.OK.value(),
+                "Order history retrieved successfully",
+                history
+        );
+
         return ResponseEntity.ok(response);
     }
 }

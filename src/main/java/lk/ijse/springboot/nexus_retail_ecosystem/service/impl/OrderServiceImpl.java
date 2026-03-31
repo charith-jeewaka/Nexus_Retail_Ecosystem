@@ -216,5 +216,27 @@ public class OrderServiceImpl implements OrderService {
         ).collect(Collectors.toList());
     }
 
+    @Override
+    public List<OrderResponseDTO> getOrdersByUserId(Long userId) {
+        // 1. Check if user exists (Optional but good for debugging)
+        if (!userRepository.existsById(userId)) {
+            throw new ResourceNotFoundException("User not found with ID: " + userId);
+        }
+
+        // 2. Fetch orders from the repository
+        List<Order> orders = orderRepository.findByUser_IdOrderByOrderDateDesc(userId);
+
+        // 3. Map Entities to DTOs
+        return orders.stream().map(order -> OrderResponseDTO.builder()
+                .orderId(order.getId())
+                .customerName(order.getUser().getUsername())
+                .status(order.getStatus().name())
+                .totalAmount(order.getTotalAmount())
+                .orderDate(order.getOrderDate())
+                .message("Order history retrieved")
+                .build()
+        ).collect(Collectors.toList());
+    }
+
 
 }
