@@ -1,0 +1,49 @@
+INSERT INTO product (category, image_url, name, unit_price, units_in_stock, active, description)
+VALUES
+('Stationery', '/uploads/pencil.png', 'Sunflower Pen', 50.00, 100, 1,
+ 'A premium smooth-writing gel pen with a unique sunflower design. Perfect for journaling and daily office use.'),
+
+('Beverages', '/uploads/cocacola.jfif', 'Coca Cola Can', 99.99, 50, 1,
+ 'The classic, refreshing taste of Coca-Cola in a convenient 330ml can. Best served chilled.'),
+
+('Electronics', '/uploads/smartwatch.jpg', 'Sanmung Smart Watch', 5000.00, 5, 1,
+ 'Feature-packed smartwatch with heart rate monitoring, sleep tracking, and a vibrant AMOLED display.'),
+
+('Groceries', '/uploads/rice.jfif', 'Rice', 200.00, 1000, 1,
+ 'Long-grain premium white rice. High nutritional value and perfect for traditional curries.'),
+
+('Groceries', '/uploads/dhal.jfif', 'Maisurr Dhal', 150.00, 100, 1,
+ 'High-protein red lentils, carefully cleaned and graded. Cooks quickly into a creamy, delicious dhal.'),
+
+('Stationery', '/uploads/download.png', 'Eraser', 10.00, 20, 1,
+ 'High-quality dust-free eraser. Gently removes pencil marks without smudging the paper.'),
+
+('Electronics', '/uploads/phone.jpg', 'Samsung J7', 30000.00, 5, 1,
+ 'A reliable smartphone featuring a vibrant 5.5-inch screen and a long-lasting battery. Ideal for social media.');
+
+
+ INSERT INTO review (product_id, customer_id, customer_name, rating, comment, created_at)
+ VALUES
+ -- Reviews for Product 1 (Sunflower Pen)
+ (1, 2, 'Charith', 5, 'Best pen I have ever used. Very smooth writing!', NOW()),
+ (1, 3, 'Jeewaka', 4, 'Good quality, but the ink runs out a bit fast.', NOW()),
+
+ -- Reviews for Product 2 (Coca Cola Can)
+ (2, 2, 'Charith', 5, 'Classic taste, always refreshing.', NOW()),
+
+ -- Reviews for Product 3 (Sanmung Smart Watch)
+ (3, 3, 'Jeewaka', 3, 'Battery life is okay, but the heart rate sensor is a bit slow.', NOW()),
+ (3, 2, 'Charith', 4, 'Great value for money. Looks very premium.', NOW()),
+
+ -- Reviews for Product 4 (Rice)
+ (4, 3, 'Jeewaka', 5, 'High quality rice. The grains are long and clean.', NOW()),
+
+ -- Reviews for Product 5 (Maisurr Dhal)
+ (5, 2, 'Charith', 4, 'Cooks very quickly. Perfect for a quick meal.', NOW()),
+
+ -- Reviews for Product 6 (Eraser)
+ (6, 3, 'Jeewaka', 2, 'It leaves a bit of a smudge on expensive paper.', NOW()),
+
+ -- Reviews for Product 7 (Samsung J7)
+ (7, 2, 'Charith', 5, 'Even for an older model, it works perfectly for my needs.', NOW()),
+ (7, 3, 'Jeewaka', 4, 'Screen is bright and clear. Good purchase.', NOW());

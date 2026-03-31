@@ -38,6 +38,9 @@ function loadProductDetails(productId) {
             $('#detail-product-category').text(p.category);
             $('#detail-product-price').text("Rs. " + p.unitPrice.toFixed(2));
 
+            const desc = p.description ? p.description : "No detailed description available for this product.";
+            $('#detail-product-description').text(desc);
+
             // Populate Image
             const imageSrc = p.imageUrl ? backendImageBase + p.imageUrl : "https://via.placeholder.com/300x200?text=No+Image";
             $('#detail-product-image').attr("src", imageSrc);

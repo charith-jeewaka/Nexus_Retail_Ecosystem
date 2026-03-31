@@ -32,6 +32,9 @@ public class Product {
 
     private String imageUrl;
 
+    @Column(columnDefinition = "TEXT")
+    private String description;
+
     @Column(nullable = false)
     private boolean active = true; // Default to true so new products show up!
 

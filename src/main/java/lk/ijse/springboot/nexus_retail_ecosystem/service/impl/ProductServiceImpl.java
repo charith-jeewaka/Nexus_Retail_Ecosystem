@@ -34,6 +34,7 @@ public class ProductServiceImpl implements ProductService {
                 .unitPrice(productDTO.getUnitPrice())
                 .unitsInStock(productDTO.getUnitsInStock())
                 .imageUrl(productDTO.getImageUrl())
+                .description(productDTO.getDescription())
                 .active(true) // Ensure it is active on creation
                 .build();
 
@@ -90,6 +91,7 @@ public class ProductServiceImpl implements ProductService {
         existingProduct.setUnitPrice(productDTO.getUnitPrice());
         existingProduct.setUnitsInStock(productDTO.getUnitsInStock());
         existingProduct.setImageUrl(productDTO.getImageUrl());
+        existingProduct.setDescription(productDTO.getDescription());
 
         Product updatedProduct = productRepository.save(existingProduct);
         return mapToDTO(updatedProduct);
@@ -113,6 +115,7 @@ public class ProductServiceImpl implements ProductService {
                 .unitPrice(product.getUnitPrice())
                 .unitsInStock(product.getUnitsInStock())
                 .imageUrl(product.getImageUrl())
+                .description(product.getDescription())
                 .averageRating(average)
                 .reviewCount(reviews.size())
                 .build();
