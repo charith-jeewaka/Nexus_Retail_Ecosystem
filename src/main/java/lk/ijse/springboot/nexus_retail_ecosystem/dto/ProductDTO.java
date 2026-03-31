@@ -36,9 +36,9 @@ public class ProductDTO {
 
     private String imageUrl;
 
-    private double averageRating;
+    private Double averageRating;
 
-    private int reviewCount;
+    private Integer reviewCount;
 
     private String description;
 }

@@ -83,6 +83,7 @@ $(document).ready(function() {
     });
 
     // STEP  SAVE THE JSON DATA TO THE DATABASE
+    // STEP 2: SAVE THE JSON DATA TO THE DATABASE
     function saveProductDetails(imageStringPath) {
 
         // Build the clean JSON object
@@ -91,7 +92,9 @@ $(document).ready(function() {
             category: $('#inp-product-category').val(),
             unitPrice: parseFloat($('#inp-product-price').val()),
             unitsInStock: parseInt($('#inp-product-stock').val()),
-            imageUrl: imageStringPath // This is the string we got from Step 1 (or null)
+            imageUrl: imageStringPath, // The path from Step 1
+            // --- ADD THIS LINE ---
+            description: $('#inp-product-description').val()
         };
 
         $.ajax({
@@ -110,38 +113,15 @@ $(document).ready(function() {
                     showConfirmButton: false,
                     timer: 700
                 });
-                clearForm();
+                clearForm(); // This will now also clear the description because of reset()
                 resetSaveButton();
             },
             error: function(xhr) {
-                // Let your existing GlobalExceptionHandler do the talking!
-                if (xhr.status === 400) {
-                    let errorMsg = "Validation Failed:\n";
-                    for (let field in xhr.responseJSON.data) {
-                        errorMsg += "• " + xhr.responseJSON.data[field] + "\n";
-                    }
-                    alert(errorMsg);
-                } else if (xhr.status === 409) {
-                    // alert(xhr.responseJSON.message); // Duplicate product
-                    Swal.fire({
-                        title: "Duplicate Input",
-                        text: xhr.responseJSON.message,
-                        icon: "info"
-                    });
-                } else if (xhr.status === 403) {
-                    // alert("Unauthorized: Only Admins can add products.");
-                    Swal.fire({
-                        title: "Unauthorized",
-                        text: "Only Admins can add products",
-                        icon: "error"
-                    });
+                // ... your existing error handling ...
+                if (xhr.status === 409) {
+                    Swal.fire({ title: "Duplicate Input", text: xhr.responseJSON.message, icon: "info" });
                 } else {
-                    // alert("An error occurred while saving.");
-                    Swal.fire({
-                        title: "Error",
-                        text: "An error occurred while saving",
-                        icon: "error"
-                    });
+                    Swal.fire({ title: "Error", text: "An error occurred while saving", icon: "error" });
                 }
                 resetSaveButton();
             }

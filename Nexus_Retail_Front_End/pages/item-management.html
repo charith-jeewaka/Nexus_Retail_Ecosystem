@@ -51,7 +51,7 @@
                             </div>
                         </div>
 
-                        <div class="row g-3 mb-4">
+                        <div class="row g-3 mb-3">
                             <div class="col-md-6">
                                 <div class="form-floating">
                                     <input type="number" step="0.01" min="0" class="form-control custom-input" id="inp-product-price" placeholder="0.00" required>
@@ -62,6 +62,19 @@
                                 <div class="form-floating">
                                     <input type="number" min="0" class="form-control custom-input" id="inp-product-stock" placeholder="0" required>
                                     <label for="inp-product-stock">Initial Stock <span class="text-danger">*</span></label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mb-4">
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <textarea class="form-control custom-input" id="inp-product-description"
+                                              placeholder="Enter product details..." style="height: 120px"></textarea>
+                                    <label for="inp-product-description">Product Description <span class="text-muted small">(Optional)</span></label>
+                                </div>
+                                <div class="form-text mt-2">
+                                    <i class="bi bi-info-circle me-1"></i> Provide details that help customers make a purchase.
                                 </div>
                             </div>
                         </div>
@@ -119,15 +132,12 @@
 </div>
 
 <style>
-    /* --- Item Management Specific Styles --- */
-
     /* Soft Danger Button for Logout */
     .btn-danger-soft {
         background-color: #fee2e2;
         color: #dc2626;
         transition: all 0.2s ease;
     }
-
     .btn-danger-soft:hover {
         background-color: #fecaca;
         color: #b91c1c;
@@ -140,22 +150,28 @@
         border-radius: 1rem;
         transition: all 0.3s ease;
     }
-
-    /* When you hover over the upload area, subtle feedback */
     .preview-container:hover {
         border-color: #94a3b8;
         background-color: #f1f5f9;
     }
-
-    /* Add a class via JS when an image is successfully loaded to remove the dashed border */
     .preview-container.has-image {
         border-style: solid;
         border-color: #e2e8f0;
         background-color: #ffffff;
     }
 
-    /* Optional: Smooth fade for the image preview */
-    #image-preview {
-        transition: opacity 0.3s ease;
+    /* Custom Input Hover/Focus effects */
+    .custom-input:focus {
+        background-color: #fff !important;
+        border-color: #0d6efd;
+        box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.1);
+    }
+
+    .btn-hover-lift {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .btn-hover-lift:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     }
 </style>
