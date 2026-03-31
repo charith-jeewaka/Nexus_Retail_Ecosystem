@@ -2,9 +2,11 @@ package lk.ijse.springboot.nexus_retail_ecosystem.service.impl;
 
 import lk.ijse.springboot.nexus_retail_ecosystem.dto.ProductDTO;
 import lk.ijse.springboot.nexus_retail_ecosystem.entity.Product;
+import lk.ijse.springboot.nexus_retail_ecosystem.entity.Review;
 import lk.ijse.springboot.nexus_retail_ecosystem.exception.DuplicateResourceException;
 import lk.ijse.springboot.nexus_retail_ecosystem.exception.ResourceNotFoundException;
 import lk.ijse.springboot.nexus_retail_ecosystem.repository.ProductRepository;
+import lk.ijse.springboot.nexus_retail_ecosystem.repository.ReviewRepository;
 import lk.ijse.springboot.nexus_retail_ecosystem.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,7 @@ import java.util.stream.Collectors;
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
+    private final ReviewRepository reviewRepository; // <--- ADD THIS INJECTION
 
     @Override
     public ProductDTO saveProduct(ProductDTO productDTO) {
@@ -93,6 +96,16 @@ public class ProductServiceImpl implements ProductService {
     }
 
     private ProductDTO mapToDTO(Product product) {
+        // 1. Fetch all reviews for this specific product from the DB
+        List<Review> reviews = reviewRepository.findByProduct_Id(product.getId());
+
+        // 2. Calculate the average using Java Streams
+        double average = reviews.stream()
+                .mapToInt(Review::getRating)
+                .average()
+                .orElse(0.0); // If no reviews, score is 0.0
+
+        // 3. Build the DTO with the new aggregated data
         return ProductDTO.builder()
                 .id(product.getId())
                 .name(product.getName())
@@ -100,6 +113,8 @@ public class ProductServiceImpl implements ProductService {
                 .unitPrice(product.getUnitPrice())
                 .unitsInStock(product.getUnitsInStock())
                 .imageUrl(product.getImageUrl())
+                .averageRating(average)
+                .reviewCount(reviews.size())
                 .build();
     }
 }

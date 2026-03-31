@@ -20,4 +20,9 @@ public class OrderResponseDTO {
     private BigDecimal totalAmount;
     private LocalDateTime orderDate;
     private String message;
+
+    private Double averageRating; // Will hold values like 4.2
+    private Integer reviewCount;  // Will hold the total number of reviews
+
+
 }

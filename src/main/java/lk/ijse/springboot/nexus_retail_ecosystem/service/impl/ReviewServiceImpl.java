@@ -23,7 +23,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public ReviewDTO saveReview(ReviewDTO dto) {
 
-        // 1. Find the product using your custom exception!
+        // 1. Find the product using  your custom exception!
         Product product = productRepository.findById(dto.getProductId())
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found with ID: " + dto.getProductId()));
 

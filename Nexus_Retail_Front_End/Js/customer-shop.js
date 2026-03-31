@@ -49,12 +49,12 @@ $(document).ready(function () {
 
         if (products.length === 0) {
             grid.html(`
-                <div class="col-12 text-center text-muted py-5">
-                    <i class="bi bi-search text-secondary opacity-25" style="font-size: 4rem;"></i>
-                    <h5 class="mt-3">No products found</h5>
-                    <p>Try adjusting your search or category filters.</p>
-                </div>
-            `);
+            <div class="col-12 text-center text-muted py-5">
+                <i class="bi bi-search text-secondary opacity-25" style="font-size: 4rem;"></i>
+                <h5 class="mt-3">No products found</h5>
+                <p>Try adjusting your search or category filters.</p>
+            </div>
+        `);
             return;
         }
 
@@ -64,42 +64,46 @@ $(document).ready(function () {
                 : "https://via.placeholder.com/300x200?text=No+Image";
 
             let isOutOfStock = product.unitsInStock === 0;
-            // Added btn-sm here to make the button sleeker
             let btnClass = isOutOfStock ? "btn-secondary disabled btn-sm" : "btn-primary btn-add-cart btn-sm";
             let btnText = isOutOfStock ? "Out of Stock" : `<i class="bi bi-cart-plus me-1"></i> Add`;
 
-            // Updated Grid classes, Image height (140px), and Font sizes (fs-6, small)
+            // --- NEW: GENERATE STAR RATING HTML ---
+            let ratingHtml = generateShopStars(product.averageRating, product.reviewCount);
+
             let card = `
-            <div class="col-6 col-md-4 col-lg-3 col-xl-2"> 
-                <div class="card h-100 shadow-sm border-0 product-card-hover bg-white">
+        <div class="col-6 col-md-4 col-lg-3 col-xl-2"> 
+            <div class="card h-100 shadow-sm border-0 product-card-hover bg-white">
+                
+                <img src="${imageSrc}" class="card-img-top p-2" alt="${product.name}" 
+                     style="height: 140px; object-fit: contain; background-color: #fff; cursor: pointer;"
+                     onclick="localStorage.setItem('current_view_product_id', ${product.id}); window.navigateCustomer('product-details');">
+                
+                <div class="card-body d-flex flex-column p-3">
+                    <span class="badge bg-light text-secondary border mb-1 align-self-start" style="font-size: 0.6rem;">${product.category}</span>
                     
-                    <img src="${imageSrc}" class="card-img-top p-2" alt="${product.name}" 
-                         style="height: 140px; object-fit: contain; background-color: #fff; cursor: pointer;"
-                         onclick="localStorage.setItem('current_view_product_id', ${product.id}); window.navigateCustomer('product-details');">
-                    
-                    <div class="card-body d-flex flex-column p-3">
-                        <span class="badge bg-light text-secondary border mb-2 align-self-start" style="font-size: 0.65rem;">${product.category}</span>
-                        
-                        <h6 class="card-title fw-bold text-dark text-truncate mb-1" 
-                            style="font-size: 0.85rem; cursor: pointer;" 
-                            title="${product.name}"
-                            onclick="localStorage.setItem('current_view_product_id', ${product.id}); window.navigateCustomer('product-details');">
-                            ${product.name}
-                        </h6>
-                        
-                        <h6 class="text-primary fw-bold mt-auto mb-3" style="font-size: 0.9rem;">Rs. ${product.unitPrice.toFixed(2)}</h6>
-                        
-                        <button class="btn ${btnClass} w-100 mt-auto fw-semibold rounded-pill" 
-                                data-id="${product.id}" 
-                                data-name="${product.name}" 
-                                data-price="${product.unitPrice}"
-                                data-image="${imageSrc}">
-                            ${btnText}
-                        </button>
+                    <div class="mb-1">
+                        ${ratingHtml}
                     </div>
+                    
+                    <h6 class="card-title fw-bold text-dark text-truncate mb-1" 
+                        style="font-size: 0.85rem; cursor: pointer;" 
+                        title="${product.name}"
+                        onclick="localStorage.setItem('current_view_product_id', ${product.id}); window.navigateCustomer('product-details');">
+                        ${product.name}
+                    </h6>
+                    
+                    <h6 class="text-primary fw-bold mt-auto mb-3" style="font-size: 0.9rem;">Rs. ${product.unitPrice.toFixed(2)}</h6>
+                    
+                    <button class="btn ${btnClass} w-100 mt-auto fw-semibold rounded-pill" 
+                            data-id="${product.id}" 
+                            data-name="${product.name}" 
+                            data-price="${product.unitPrice}"
+                            data-image="${imageSrc}">
+                        ${btnText}
+                    </button>
                 </div>
             </div>
-        `;
+        </div>`;
             grid.append(card);
         });
     }
@@ -213,4 +217,30 @@ $(document).ready(function () {
             $(this).removeClass('animate__animated animate__heartBeat');
         });
     };
+
+    // Helper to generate the compact star rating for Shop Cards
+    function generateShopStars(rating, count) {
+        let starsHtml = "";
+        let safeRating = parseFloat(rating) || 0;
+
+        for (let i = 1; i <= 5; i++) {
+            if (safeRating >= i) {
+                // Full Star
+                starsHtml += '<i class="bi bi-star-fill text-warning me-1" style="font-size: 0.7rem;"></i>';
+            } else if (safeRating > i - 1 && safeRating < i) {
+                // Half Star
+                starsHtml += '<i class="bi bi-star-half text-warning me-1" style="font-size: 0.7rem;"></i>';
+            } else {
+                // Empty Star
+                starsHtml += '<i class="bi bi-star text-secondary opacity-25 me-1" style="font-size: 0.7rem;"></i>';
+            }
+        }
+
+        return `
+        <div class="d-flex align-items-center">
+            <div class="me-1 d-flex">${starsHtml}</div>
+            <span class="text-muted" style="font-size: 0.65rem;">(${count || 0})</span>
+        </div>
+    `;
+    }
 });
