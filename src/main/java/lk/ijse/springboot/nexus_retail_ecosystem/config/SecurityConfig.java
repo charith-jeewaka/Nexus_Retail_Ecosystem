@@ -38,6 +38,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers("/uploads/**").permitAll() // to view images
+                        .requestMatchers(HttpMethod.GET, "/uploads/**").permitAll() // Ensure GET is allowed
                         .requestMatchers(HttpMethod.GET, "/api/v1/products/**").permitAll() // Customers can view products!
                         .requestMatchers(HttpMethod.GET, "/api/v1/reviews/product/**").permitAll()
                         //whitelist the websocket

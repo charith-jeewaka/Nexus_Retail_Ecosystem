@@ -206,9 +206,11 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found with ID: " + orderId));
 
         // 2. Map the OrderDetails to our clean DTOs
+
         return order.getOrderDetails().stream().map(detail -> OrderItemResponseDTO.builder()
                 .productId(detail.getProduct().getId())
                 .productName(detail.getProduct().getName())
+                .productImage(detail.getProduct().getImageUrl())//for testing
                 .quantity(detail.getQuantity())
                 .unitPrice(detail.getUnitPrice())
                 .subTotal(detail.getSubtotal())

@@ -31,6 +31,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
 
+        // NEW: Skip JWT logic for image uploads
+        String path = request.getServletPath();
+        if (path.startsWith("/uploads/")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         // 1. Look for the Authorization header
         final String authHeader = request.getHeader("Authorization");
         final String jwt;
