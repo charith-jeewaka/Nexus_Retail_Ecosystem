@@ -43,6 +43,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/v1/reviews/product/**").permitAll()
                         //whitelist the websocket
                         .requestMatchers("/ws-nexus/**").permitAll()
+
+                        .requestMatchers("/ai/**", "/api/v1/ai/**").permitAll()
                         .anyRequest().authenticated() // Everything else requires a valid token
                 )
                 .sessionManagement(session -> session
