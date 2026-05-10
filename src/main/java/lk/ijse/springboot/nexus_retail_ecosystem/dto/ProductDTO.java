@@ -41,4 +41,6 @@ public class ProductDTO {
     private Integer reviewCount;
 
     private String description;
+
+    private Integer soldCount;
 }

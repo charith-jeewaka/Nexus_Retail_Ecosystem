@@ -5,6 +5,7 @@ import lk.ijse.springboot.nexus_retail_ecosystem.entity.Product;
 import lk.ijse.springboot.nexus_retail_ecosystem.entity.Review;
 import lk.ijse.springboot.nexus_retail_ecosystem.exception.DuplicateResourceException;
 import lk.ijse.springboot.nexus_retail_ecosystem.exception.ResourceNotFoundException;
+import lk.ijse.springboot.nexus_retail_ecosystem.repository.OrderDetailRepository;
 import lk.ijse.springboot.nexus_retail_ecosystem.repository.ProductRepository;
 import lk.ijse.springboot.nexus_retail_ecosystem.repository.ReviewRepository;
 import lk.ijse.springboot.nexus_retail_ecosystem.service.ProductService;
@@ -20,6 +21,7 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final ReviewRepository reviewRepository; // <--- ADD THIS INJECTION
+    private final OrderDetailRepository orderDetailRepository;
 
     @Override
     public ProductDTO saveProduct(ProductDTO productDTO) {
@@ -44,11 +46,22 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDTO> getAllProducts() {
-        // Updated: Only return products that are active (Soft Delete filter)
+        // Only return products that are active (Soft Delete filter)
         List<Product> products = productRepository.findAllByActiveTrue();
 
         return products.stream()
-                .map(this::mapToDTO)
+                .map(product -> {
+                    // 1. Map to your standard DTO using your existing helper
+                    ProductDTO dto = mapToDTO(product);
+
+                    // 2. Fetch the sold count from the database
+                    Integer sold = orderDetailRepository.getTotalSoldQuantityByProductId(product.getId());
+
+                    // 3. Attach it to the DTO (assuming you added @Data or a setter for soldCount)
+                    dto.setSoldCount(sold);
+
+                    return dto;
+                })
                 .collect(Collectors.toList());
     }
 
@@ -120,4 +133,6 @@ public class ProductServiceImpl implements ProductService {
                 .reviewCount(reviews.size())
                 .build();
     }
+
+
 }

@@ -72,8 +72,7 @@ $(document).ready(function () {
 
             // --- PLACEHOLDER: SOLD COUNT ---
             // You can replace this later with actual data (e.g., product.soldCount)
-            let placeholderSoldCount = 10;
-
+            let actualSoldCount = product.soldCount || 0;
             let card = `
         <div class="col-6 col-md-4 col-lg-3 col-xl-2 mb-4">
             <div class="card h-100 shadow-sm border-0 product-card-hover bg-white overflow-hidden rounded-4" style="transition: transform 0.2s ease, box-shadow 0.2s ease;">
@@ -109,7 +108,7 @@ $(document).ready(function () {
                         </h5>
                         
                         <div class="text-muted mb-3 mt-1 fw-medium" style="font-size: 0.7rem;">
-                            <span class="text-secondary"><i class="bi bi-graph-up-arrow me-1"></i>${placeholderSoldCount} sold</span>
+                            <span class="text-secondary"><i class="bi bi-graph-up-arrow me-1"></i>${actualSoldCount} sold</span>
                         </div>
                         
                         <button class="btn btn-sm ${btnClass} w-100 fw-bold rounded-3 py-2" 
