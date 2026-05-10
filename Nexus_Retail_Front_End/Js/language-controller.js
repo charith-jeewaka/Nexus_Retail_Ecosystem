@@ -1,13 +1,24 @@
 // 1. THE DICTIONARY
 const translations = {
     "en": {
-        "nav_overview": "Dashboard",
+        "nav_dashboard": "Dashboard",
         "search_bar": "Search Product by name",
-        "btn_add_cart": "Add to Cart"
+        "btn_add_cart": "Add to Cart",
+        "nav_inventory_manager":"Inventory Manager",
+        "nav_add_products": "Add Products",
+        "nav_manage_orders": "Manage Orders",
+        "nav_sales_reports": "Sales Reports",
+        // "nav_logout": "Logout"
+
     },
     "si": {
-        "nav_overview": "ප්රධාන පුවරුව",
-        "search_bar": "කරත්තයට එක් කරන්න"
+        "nav_dashboard": "ප්රධාන පුවරුව",
+        "search_bar": "කරත්තයට එක් කරන්න",
+        "nav_inventory_manager": "අයිතම කළමනාකරණය",
+        "nav_add_products": "නිෂ්පාදන එකතු කරන්න",
+        "nav_manage_orders":"ඇණවුම් කළමනාකරණය",
+        "nav_sales_reports":"විකුණුම් වාර්තා",
+        // "nav_logout":"පිටවීම",
     }
 };
 
