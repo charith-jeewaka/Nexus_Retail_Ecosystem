@@ -1,5 +1,7 @@
 //admin-dashboard.js
 const baseUrl = "http://localhost:8080/api/v1/products";
+const token = localStorage.getItem("nexus_token");
+
 
 
 $(document).ready(function(){
@@ -15,6 +17,7 @@ $(document).ready(function(){
     $(document).on('adminPageLoaded', function(event, subPage) {
         if (subPage === 'admin-overview') {
             fetchDashboardStatus();
+            fetchTopReviews();
         }
     });
 
@@ -205,5 +208,79 @@ $(document).ready(function(){
                 maintainAspectRatio: false
             }
         });
+    }
+
+    let topReviews = [];
+    let currentIndex = 0;
+    function fetchTopReviews(){
+        $.ajax({
+            url: "http://localhost:8080/api/v1/reviews/top-rated",
+            type: "GET",
+            headers: {
+                "Authorization": "Bearer " + token
+            },
+            success: function(response){
+                topReviews = response.data;
+
+                if (topReviews && topReviews.length > 0){
+                    displayReview(topReviews[0]);
+
+                    //automatically swap
+                    startReviewSlider();
+                }
+            },
+            error: function(error){
+                console.error(error);
+            }
+        });
+    }
+
+    function displayReview(review) {
+        const initial = review.customerName.charAt(0).toUpperCase();
+
+        // Generate stars based on the rating
+        let stars = "";
+        for (let i = 0; i < review.rating; i++) {
+            stars += '<i class="fas fa-star text-warning" style="font-size: 0.8rem;"></i>';
+        }
+
+        const reviewHtml = `
+        <div class="p-1 w-100 d-flex align-items-center" style="height: 100%;border-radius: 5px; box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;">
+            <!-- Image Section -->
+            <div style="width: 25%; height: 120px; border-radius: 5px; overflow: hidden; border: 1px solid #ddd;">
+                <img src="${review.imageUrl}" alt="Product" style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+            <!-- Text Section -->
+            <div style="width: 75%; padding-left: 15px;">
+                <div class="d-flex align-items-center mb-1">
+                    <div class="bg-primary text-white rounded-circle d-flex justify-content-center align-items-center me-2 fw-bold" 
+                         style="width: 30px; height: 30px; font-size: 0.75rem;">
+                        ${initial}
+                    </div>
+                    <h6 class="mb-0 fw-bold" style="font-size: 0.9rem;">${review.customerName}</h6>
+                </div>
+                <div class="mb-1">${stars}</div>
+                <p class="text-secondary mb-0" style="font-size: 0.85rem; line-height: 1.3; font-style: italic;">
+                    "${review.comment}"
+                </p>
+            </div>
+        </div>`;
+
+        // Target the inner container inside sub-container-2
+        $('#sub-container-2 .review-card-wrapper').html(reviewHtml);
+    }
+    function startReviewSlider() {
+        // Clear any existing intervals to prevent memory leaks
+        if (window.reviewInterval) clearInterval(window.reviewInterval);
+
+        window.reviewInterval = setInterval(() => {
+            currentIndex = (currentIndex + 1) % topReviews.length;
+
+            // Add a smooth fade transition
+            $('#sub-container-2 .review-card-wrapper').fadeOut(400, function() {
+                displayReview(topReviews[currentIndex]);
+                $(this).fadeIn(400);
+            });
+        }, 5000); // 5 seconds
     }
 });

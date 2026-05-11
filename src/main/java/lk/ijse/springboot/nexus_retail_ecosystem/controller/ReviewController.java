@@ -3,6 +3,7 @@ package lk.ijse.springboot.nexus_retail_ecosystem.controller;
 import jakarta.validation.Valid;
 import lk.ijse.springboot.nexus_retail_ecosystem.dto.APIResponse;
 import lk.ijse.springboot.nexus_retail_ecosystem.dto.ReviewDTO;
+import lk.ijse.springboot.nexus_retail_ecosystem.dto.ReviewResponseDTO;
 import lk.ijse.springboot.nexus_retail_ecosystem.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -44,6 +45,18 @@ public class ReviewController {
                 HttpStatus.OK.value(),
                 "Reviews retrieved successfully",
                 reviews
+        );
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/top-rated")
+    public ResponseEntity<APIResponse> getAllTopRatedReviews() {
+        List<ReviewResponseDTO> topReviews = reviewService.getTopRatedReviews();
+
+        APIResponse response = new APIResponse(
+                HttpStatus.OK.value(),
+                "Top rated reviews retrieved successfully",
+                topReviews
         );
         return ResponseEntity.ok(response);
     }

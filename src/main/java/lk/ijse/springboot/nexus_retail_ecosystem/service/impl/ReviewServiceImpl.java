@@ -1,6 +1,7 @@
 package lk.ijse.springboot.nexus_retail_ecosystem.service.impl;
 
 import lk.ijse.springboot.nexus_retail_ecosystem.dto.ReviewDTO;
+import lk.ijse.springboot.nexus_retail_ecosystem.dto.ReviewResponseDTO;
 import lk.ijse.springboot.nexus_retail_ecosystem.entity.Product;
 import lk.ijse.springboot.nexus_retail_ecosystem.entity.Review;
 import lk.ijse.springboot.nexus_retail_ecosystem.exception.ResourceNotFoundException;
@@ -51,6 +52,21 @@ public class ReviewServiceImpl implements ReviewService {
         return reviews.stream()
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
+    }
+
+    public List<ReviewResponseDTO> getTopRatedReviews() {
+        // Fetch only 5-star reviews
+        List<Review> reviews = reviewRepository.findByRating(5);
+
+        return reviews.stream().map(review -> ReviewResponseDTO.builder()
+                .customerName(review.getCustomerName())
+                .rating(review.getRating())
+                .comment(review.getComment())
+                .imageUrl(review.getProduct().getImageUrl()) // Get image from joined Product
+                .productName(review.getProduct().getName())
+                .createdAt(review.getCreatedAt())
+                .build()
+        ).collect(Collectors.toList());
     }
 
     // A handy helper method to keep our code clean, just like in ProductServiceImpl!
