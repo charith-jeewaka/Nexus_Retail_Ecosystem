@@ -15,14 +15,11 @@ import java.time.LocalDateTime;
 public class OrderResponseDTO {
 
     private Long orderId;
-    private String customerName; // <-- NEW FIELD!
+    private String customerName;
     private String status;
     private BigDecimal totalAmount;
     private LocalDateTime orderDate;
     private String message;
-
-    private Double averageRating; // Will hold values like 4.2
-    private Integer reviewCount;  // Will hold the total number of reviews
-
-
+    private Double averageRating;
+    private Integer reviewCount;
 }

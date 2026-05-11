@@ -18,7 +18,7 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col me-2">
                             <div class="text-xs fw-bold text-primary text-uppercase mb-1" style="font-size: 0.8rem;">Today's Revenue</div>
-                            <div class="h5 mb-0 fw-bold text-gray-800">Rs. 145,250.00</div>
+                            <div class="h5 mb-0 fw-bold text-gray-800" id="dash-today-revenue">Rs. 145,250.00</div>
                         </div>
                         <div class="col-auto">
                             <i class="bi bi-currency-dollar text-secondary opacity-25 h1 m-0"></i>
@@ -33,8 +33,8 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col me-2">
-                            <div class="text-xs fw-bold text-success text-uppercase mb-1" style="font-size: 0.8rem;">New Orders</div>
-                            <div class="h5 mb-0 fw-bold text-gray-800">32</div>
+                            <div class="text-xs fw-bold text-success text-uppercase mb-1" style="font-size: 0.8rem;">Pending Orders</div>
+                            <div class="h5 mb-0 fw-bold text-gray-800" id="dash-pending-orders"></div>
                         </div>
                         <div class="col-auto">
                             <i class="bi bi-cart-check text-secondary opacity-25 h1 m-0"></i>
@@ -81,28 +81,111 @@
         </div>
     </div>
 
-    <div class="row g-4 mb-4">
-        <div class="col-lg-8">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-header bg-white border-0 pt-3 d-flex justify-content-between align-items-center">
-                    <h6 class="m-0 fw-bold text-primary">Sales Overview (Last 7 Days)</h6>
-                    <div class="dropdown">
-                        <button class="btn btn-sm btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown">View By</button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Week</a></li>
-                            <li><a class="dropdown-item" href="#">Month</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="card-body d-flex align-items-center justify-content-center bg-light m-3 rounded" style="min-height: 250px;">
-                    <div class="text-center text-muted">
-                        <i class="bi bi-graph-up h1 d-block mb-2"></i>
-                        [ Interactive ChartJS Graph ]
-                    </div>
-                </div>
+<!--    graph content-->
+    <div id="dash-chart-main-container" class="rounded bg-white">
+        <!-- Main Chart: Sales Trend -->
+        <div id="dash-graph-container" class="p-4 border-end">
+            <div class="w-100 h-100">
+                <h6 class="fw-bold text-uppercase text-muted mb-3" style="font-size: 0.75rem;">Revenue Performance (Weekly)</h6>
+                <canvas id="revenueChart"></canvas>
             </div>
         </div>
 
+        <div id="dash-main-sub-container">
+            <!-- Sub 1: Inventory Health and orders -->
+            <div id="sub-container-1" class="p-3 border-bottom">
+                <!-- Doughnut 1 -->
+                <div class="chart-wrapper" style="height: 100%; width: 50% ;">
+                    <h6 class="fw-bold text-center text-muted mb-2" style="font-size: 1.5rem;">Stock Health</h6>
+                    <div class="canvas-holder">
+                        <canvas id="stockDoughnut" ></canvas>
+                    </div>
+                </div>
+
+                <!-- Doughnut 2 -->
+                <div class="chart-wrapper" style="height: 100%;">
+                    <h6 class="fw-bold text-center text-muted mb-2" style="font-size: 1.5rem;">Order Summery</h6>
+                    <div class="canvas-holder">
+                        <canvas id="orderDoughnut" style="width: 50%;height: 100%"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sub 2: Top Review -->
+            <div id="sub-container-2" style="display: flex;flex-direction: column;align-items: center;">
+<!--                title-->
+                <h6 class="fw-bold text-center text-muted" style="font-size: 1.5rem;">Top Rated Items And Comments</h6>
+<!--                review card-->
+                <div class="p-1" style="width: 100%;height: 100%;border: 1px solid #e4dada; display: flex; flex-direction: row; align-items: center;">
+<!--                    image-->
+                    <div style="border: 1px solid black;height: 100%;width: 25%">image</div>
+<!--                    comment-->
+                    <div style="height: 100%;width: 75%;border: 1px solid black"></div>
+                </div>
+
+            </div>
+        </div>
     </div>
 
 </div>
+
+<style>
+    #dash-chart-main-container {
+        height: 61vh;
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        display: flex;
+        flex-direction: row;
+        border: 1px solid #e3e6f0; /* Soft border instead of black */
+    }
+    #dash-graph-container {
+        width: 55%;
+        display: flex;
+    }
+    #dash-main-sub-container {
+        width: 45%;
+        display: flex;
+        flex-direction: column;
+    }
+    #sub-container-1 {
+        height: 55%;
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-around;
+        padding: 15px;
+        gap: 15px; /* Adds space between the two charts */
+    }
+    #sub-container-2{
+        height: 45%;
+        display: flex;
+        align-items: center;
+    }
+    .chart-wrapper {
+        flex: 1; /* Gives equal space to both doughnuts */
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .canvas-holder {
+        position: relative;
+        height: 140px; /* Force a height so the chart fits the card */
+        width: 100%;
+    }
+
+    .chart-inner-text {
+        position: absolute;
+        top: 55%; /* Adjusted slightly for the header space */
+        left: 50%;
+        transform: translate(-50%, -50%);
+        pointer-events: none; /* Allows hovering the chart behind the text */
+        text-align: center;
+    }
+
+    #stock-total-label {
+        font-size: 1.2rem;
+    }
+</style>
